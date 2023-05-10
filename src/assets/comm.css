@@ -1,0 +1,97 @@
+html,body{
+	margin: 0;
+	padding: 0;
+	-ms-overflow-style: none;
+	overflow: -moz-scrollbars-none;
+}
+*{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+body::-webkit-scrollbar { width: 0 !important }
+html::-webkit-scrollbar { width: 0 !important }
+body{
+	background: url("@/assets/image/bg.png") no-repeat;
+	    background-size: 100% 100%;
+	    min-height: 100vh;
+}
+.maincon{
+	width: calc(100% - (1.45833vw * 2));
+}
+.bgbox-s::before {
+	    content: "";
+	    display: block;
+	    width: 100%;
+	    height: 2.2396vw;
+		background: url("~@/assets/image/panel-item-top.png") no-repeat;
+		background-size: 100% 100%;
+	}
+.bgbox-s::after {
+	    content: "";
+	    display: block;
+	    width: 100%;
+	    height: 2.2396vw;
+		background: url("~@/assets/image/panel-item-bootom.png") no-repeat;
+		background-size: 100% 100%;
+		margin-bottom: -10px;
+	}
+.bgbox-s{
+	margin-bottom:25px;
+}
+.bgbox-m::before {
+	    content: "";
+	    display: block;
+	    width: 100%;
+	    height: 2.2396vw;
+		background: url("~@/assets/image/panel-item-top2.png") no-repeat;
+		background-size: 100% 100%;
+	}
+.bgbox-m::after {
+	    content: "";
+	    display: block;
+	    width: 100%;
+	    height: 2.2396vw;
+		background: url("~@/assets/image/panel-item-bootom2.png") no-repeat;
+		background-size: 100% 100%;
+		margin-bottom: -10px;
+	}
+.bgbox-m{
+	margin-bottom:25px;
+}
+.el-menu--horizontal .el-menu .el-menu-item, .el-menu--horizontal .el-menu .el-submenu__title{
+		background: transparent;
+		border: none;
+		color: white;
+		text-align: center;
+	}
+.el-menu{
+		background: rgba(0,64,130,0.7);
+	}
+	
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li{
+	color:  #00C5F2;
+	border: 1px solid #52CCFF;
+	background-color: transparent;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background: linear-gradient(180deg, rgba(3,87,176,0) 0%, rgba(61,159,207,0.7) 100%);
+    color: #00C5F2;
+    border: 1px solid #52CCFF;
+}
+.el-pagination{
+	text-align: center;
+	margin-top: 34px;
+}
+.el-dialog__wrapper::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+}
+/* 跳转 */
+.el-pagination__jump{
+	color: #00C5F2;
+}
+.el-pagination__editor.el-input .el-input__inner{
+	background-color: transparent;
+	color: #00C5F2;
+	border:1px solid  #00C5F2;
+}

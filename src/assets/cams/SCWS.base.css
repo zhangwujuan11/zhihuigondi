@@ -1,0 +1,278 @@
+* {
+  font-family:Microsoft YaHei;
+}
+
+html {
+    overflow: -moz-hidden-unscrollable;
+    height: 100%;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+div::-webkit-scrollbar {
+    display: none;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+.to-index{
+    height: 3.4042vw;
+    width: 24vw;
+    left:38vw;
+    top: 0;
+    position: relative;
+    cursor: pointer;
+}
+
+.index-header-img{
+    position: absolute;
+    width: 100vw;
+    height: auto;
+}
+.index-header .menu-top{
+    height: 2.6042vw;
+    position: relative;
+    z-index: 999;
+    text-align: right;
+}
+
+.index-header .menu-list{
+    display: flex;
+    font-size: 0;
+    position: relative;
+    z-index: 2;
+}
+.user-menu{
+	width: 5vw;
+	z-index: 9999;
+	right: -2.5vw;
+	top: 2vw;
+	background: #004088;
+	font-size: 0.7282vw;
+	color: #fff;
+	border-radius: 0.25vw;
+	line-height: 1.44vw;
+	padding: 0.78vw 0.52vw;
+	opacity: 0.9;
+	text-align: center;
+	display: none;
+	position: absolute;
+	
+}
+.user-menu li{list-style: none;}
+.index-header .menu-list .btn-item{
+    width: 6.770833vw;
+    height: 2.083333vw;
+    line-height: 1.875vw;
+    display: inline-block;
+    border: 0.1041666vw solid rgba(0, 69, 149, 1);
+    text-align: center;
+    border-radius: 1.458333vw;
+    margin-right: 0.582333vw;
+    cursor: pointer;
+    font-size: 0.9375vw;
+    color: #0081A6;
+}
+.carousel-inner>.item>img, .carousel-inner>.item>a>img{
+    width: 100%;
+}
+
+.index-header .menu-list .l{
+    padding-left: 1.45833vw;
+    width: 38.54266667vw;
+}
+.index-header .menu-list .m{
+    width: 23.6vw;
+
+}
+.index-header .menu-list .r{
+    width: 37.8vw;
+    position: relative;
+
+}
+.drop-menu{
+    position: absolute;
+    width: 7.770833vw;
+    right: 1.5vw;
+    top: 2.5vw;
+    background: #004088;
+    font-size: 0.7282vw;
+    color:#fff;
+    border-radius: 0.25vw;
+    line-height: 1.44vw;
+    padding: 0.78vw 0.52vw;
+    opacity: 0.9;
+    display: none;
+    
+}
+.drop-menu p{
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+
+
+.body_main_navbar{
+    background-color: #0c1b2e;
+}
+
+
+
+
+.default_div{
+    background-color: #1f497a78;
+    border-radius: 10px;
+    opacity: 0.79;
+    padding:10px 10px 10px 10px;  /* 边预留各 10px */
+}
+
+.default_div_white{
+    color:#000; /*字体颜色*/
+    border:2px solid #111; /* 边框 */
+    background-color: #ffffff; /*背景色*/
+    /*box-shadow:0px 0px 5px #05059c inset, 0px 0px 15px #103a65 inset;  内阴影*/
+    /*box-shadow:0px 0px 5px #809afb inset, 0px 0px 15px #04315f inset;*/
+    border-radius: 5px;   /*圆角*/
+    padding:10px 10px 10px 10px;  /* 边预留各 10px */
+}
+
+.default_div_center{
+    color:#dddddd; /*字体颜色*/
+    border:2px solid #111; /* 边框 */
+    background-color: #0b1a2d; /*背景色*/
+    box-shadow:0px 0px 5px #05059c inset, 0px 0px 15px #103a65 inset;  /*内阴影*/
+    /* box-shadow: 0 0 10px #2C58A6;*/  /*外阴影*/
+    border-radius: 5px;   /*圆角*/
+    padding:10px 10px 10px 10px;  /* 边预留各 10px */
+    /* 水平居中 + 垂直居中 */
+    justify-content:center;
+    align-items:center;
+    display:-webkit-flex;
+    /* 需要自己设置的部分 */
+    /* width:calc(100% - 20px); */
+    /* height:calc(100% - 20px); */
+}
+
+.topL {
+    left:0px;
+    width: 40px;
+    height: 40px;
+    border-top-width: 3px;
+    border-top-color: #26c6f0;
+    border-top-style: solid;
+    border-left-width: 3px;
+    border-left-color: #26c6f0;
+    border-left-style: solid;
+    position: absolute;
+}
+.topR {
+    width: 40px;
+    height: 40px;
+    border-top-width: 3px;
+    border-top-color: #26c6f0;
+    border-top-style: solid;
+    border-right-width: 3px;
+    border-right-color: #26c6f0;
+    border-right-style: solid;
+    position: absolute;
+    right: 0px;
+}
+.bottomL {
+    left:0px;
+    width: 40px;
+    height: 40px;
+    border-bottom-width: 3px;
+    border-bottom-color: #26c6f0;
+    border-bottom-style: solid;
+    border-left-width: 3px;
+    border-left-color: #26c6f0;
+    border-left-style: solid;
+    position: absolute;
+    bottom: 0px;
+}
+.bottomR {
+    width: 40px;
+    height: 40px;
+    border-bottom-width: 3px;
+    border-bottom-color: #26c6f0;
+    border-bottom-style: solid;
+    border-right-width: 3px;
+    border-right-color: #26c6f0;
+    border-right-style: solid;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+.default_div_green{
+    padding:10px 10px 10px 10px;  /* 边预留各 10px */
+    color:#dddddd; /*字体颜色*/
+    background-color:#0c1b2e78;
+    box-shadow: inset 0 0 30px #05a060ba;
+    /* 限制子元素的绝对位置是相对于该父元素的 */
+    position:relative;
+}
+.default_div_file{
+    color:#000; /*字体颜色*/
+    border:2px solid #000; /* 边框 */
+    background-color: #fff; /*背景色*/
+    box-shadow:0px 0px 5px #444444 inset, 0px 0px 15px #75757b inset;  /*内阴影*/
+    border-radius: 5px;   /*圆角*/
+    padding:10px 10px 10px 10px;  /* 边预留各 10px */
+}
+.div_blur{
+    background: inherit;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -ms-filter: blur(5px);
+    -o-filter: blur(5px);
+    filter: blur(5px);
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=false);
+}
+
+/* 消息中心 */
+
+.nwsbox{
+	width:100px;
+	height: 100%;
+	position: absolute;
+	right: 5vw;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.index-header .login-out{
+   /* position: absolute;
+    top: 0.6vw;
+    right: 2vw; */
+    font-size: 0.8vw;
+    color: #0081A6;
+    cursor: pointer;
+	display: flex;
+	align-items: center;
+}
+.index-header .login-out span{
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+.line span{
+	display: block;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background-color: #EA0802;
+	position:absolute;
+	top: -6px;
+	right: 4px;
+	color: #fff;
+	font-size: 10px;
+	text-align: center;
+	line-height: 14px;
+}
+
+	
+
