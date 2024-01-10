@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="钢筋抗压试验" :visible.sync="$store.state.teamtable" width="90%"  @close="closed">
+	<el-dialog title="钢筋拉伸试验" :visible.sync="$store.state.teamtable" width="90%"  @close="closed">
 		<div>
 			<ul class="testul">
 				<li>

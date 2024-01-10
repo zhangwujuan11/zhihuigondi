@@ -56,28 +56,28 @@
 		 </el-table-column> 
 		 <el-table-column
 		   prop="gotimeStatus"
-		   label="上班打卡状态">
+		   label="打卡状态">
 		   <template slot-scope="scope">
 			   {{scope.row.gotimeStatus | gotimeStatus}}
 		   </template>
 		 </el-table-column> 
-		 <el-table-column
+		<!-- <el-table-column
 		   prop="offtimeStatus"
 		   label="下班打卡状态">
 		   <template slot-scope="scope">
 			   {{scope.row.offtimeStatus | offtimeStatus}}
 		   </template>
-		 </el-table-column> 
+		 </el-table-column> -->
 		 <el-table-column
 		  width="120"
 		   prop="gotimeTime"
-		   label="上班打卡时间">
+		   label="打卡时间">
 		 </el-table-column> 
-		 <el-table-column
+		<!-- <el-table-column
 		  width="120"
 		   prop="offtimeTime"
 		   label="下班打卡时间">
-		 </el-table-column> 
+		 </el-table-column> -->
 	  </el-table>
 	  <span slot="footer" class="dialog-footer">
 	    <el-button @click="$store.state.wokerdilog = false">关 闭</el-button>

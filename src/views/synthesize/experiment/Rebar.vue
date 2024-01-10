@@ -63,7 +63,7 @@
 		</Titlel>
 
 		<!-- 新增 -->
-		<el-dialog title="新增钢筋抗压试验数据" :visible.sync="wokerdilog" width="80%">
+		<el-dialog title="新增钢筋拉伸试验数据" :visible.sync="wokerdilog" width="80%">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
 				<el-form-item label="施工单位" prop="construction">
 					<el-select v-model="ruleForm.construction" placeholder="请选择施工单位" style="width: 80%;">
@@ -112,7 +112,7 @@
 
 
 		<!-- 修改 -->
-		<el-dialog title="修改钢筋抗压试验数据" :visible.sync="wokerdilogchange" width="80%">
+		<el-dialog title="修改钢筋拉伸试验数据" :visible.sync="wokerdilogchange" width="80%">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
 				<el-form-item label="施工单位" prop="construction">
 					<el-select v-model="ruleForm.construction" placeholder="请选择施工单位" style="width: 80%;" disabled>
@@ -122,8 +122,7 @@
 				</el-form-item>
 				<el-form-item label="监理单位" prop="supervision">
 					<el-select v-model="ruleForm.supervision" placeholder="请选择监理单位" style="width: 80%;">
-						<el-option v-for="(item,index) in optiono" :label="item.deptName"
-							:value="item.deptName"></el-option>
+						<el-option v-for="(item,index) in optiono" :label="item.deptName" :value="item.deptName"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="报告编号" prop="sampleNo">

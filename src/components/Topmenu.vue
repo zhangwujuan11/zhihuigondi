@@ -2,10 +2,10 @@
 	<div class="topmenu">
 		<!-- 消息加username -->
 		<div class="menutop">
-			<div class="to-index"></div>
+			<div class="to-index" @click="gohome()"></div>
 			<div class="forright">
 				<!-- 消息 -->
-				<!-- <div class="line" @click="gotopnews()"><span id="newstatol">{{tatol | tatl}}</span></div> -->
+				<div class="line" @click="gotopnews()"><span id="newstatol">{{tatol | tatl}}</span></div>
 				<!-- username -->
 				<el-dropdown>
 					<span class="el-dropdown-link">
@@ -18,9 +18,10 @@
 				</el-dropdown>
 			</div>
 		</div>
-		<!-- <div class="btnbox">
+		<div class="btnbox">
 				<button v-for="(item,index) in menList" :key="index" @click="linkTo(item.url)"
 				:class="{tets: item.active,hasnone:item.pass}">{{item.tiele}}</button>
+				<!-- 综合按钮 -->
 				<el-menu
 				class="el-menu-demo" 
 				mode="horizontal" 
@@ -34,7 +35,7 @@
 						</el-menu-item>
 					</el-submenu>
 				</el-menu>
-		</div> -->
+		</div>
 	</div>
 </template>
 
@@ -66,9 +67,14 @@
 							url: "/news/index",
 							active: false
 						},
+						// {
+						// 	tiele: "BIM中心",
+						// 	url: "/bim/index",
+						// 	active: false
+						// },
 						{
-							tiele: "BIM中心",
-							url: "/bim/index",
+							tiele: "人脸考勤",
+							url: "/synthesize/faceAttendance/index",
 							active: false
 						},
 						{
@@ -100,7 +106,7 @@
 							active: false
 						},
 						{
-							tiele: "数据大屏",
+							tiele: "智慧梁场",
 							url: "management/management_file_content",
 							active: false
 						}
@@ -109,17 +115,17 @@
 						tiele: "项目简介",
 						url: "/home/projectduction"
 					},
-					{//
-						tiele: "水泥搅拌桩",
+					// {//
+					// 	tiele: "水泥搅拌桩",
 						
-					},{//
-						tiele: "大数据防疫监管中心",
+					// },{//
+					// 	tiele: "大数据防疫监管中心",
 						
-					},
-					{
-						tiele: "气象数据管理",
-						url: "/synthesize/weather/index"
-					},
+					// },
+					// {
+					// 	tiele: "气象数据管理",
+					// 	url: "/synthesize/weather/index"
+					// },
 					{
 						tiele: "农民工管理",
 						url: "/synthesize/team/index?type=1"
@@ -136,30 +142,30 @@
 						tiele: "项目成员工资",
 						url: "/synthesize/project/wages"
 					},
-					{
-						tiele: "分包商设备台账",
-						url: "/synthesize/subcontractor/index"
-					},
-					{
-						tiele: "物料进出记录表",
-						url: "/synthesize/assets/index"
-					},
-					{
-						tiele: "人脸考勤记录",
-						url: "/synthesize/faceAttendance/index"
-					},
+					// {
+					// 	tiele: "人脸考勤记录",
+					// 	url: "/synthesize/faceAttendance/index",
+					// },
+					// {
+					// 	tiele: "分包商设备台账",
+					// 	url: "/synthesize/subcontractor/index"
+					// },
+					// {
+					// 	tiele: "物料进出记录表",
+					// 	url: "/synthesize/assets/index"
+					// },
 					{
 						tiele: "考勤管理",
 						url: "/synthesize/antiepidemic/index"
 					},
-					{
-						tiele: "项目物资统计表",
-						url: "/synthesize/material/index"
-					},
-					{
-						tiele: "拌合站试验",
-						url: "/synthesize/cement/index"
-					},
+					// {
+					// 	tiele: "项目物资统计表",
+					// 	url: "/synthesize/material/index"
+					// },
+					// {
+					// 	tiele: "拌合站试验",
+					// 	url: "/synthesize/cement/index"
+					// },
 					{
 						tiele: "混凝土抗压试验",
 						url: "/synthesize/experiment/concreteteam"
@@ -169,24 +175,30 @@
 						url: "/synthesize/experiment/rebarteam"
 					},
 					{
-						tiele: "超声基桩桥梁检测",
-						url: "/synthesize/ultrasonic/index"
-					},
-					{
-						tiele: "梁片管理",
-						url: "/synthesize/bridge/index"
-					},
-					{
-						tiele: "智能喷淋",
-						url: "/synthesize/getspray/index"
-					},
+						tiele: "实时拌合站",
+						url: "/synthesize/stirStation/index"
+					}
 					// {
+					// 	tiele: "超声基桩桥梁检测",
+					// 	url: "/synthesize/ultrasonic/index"
+					// },
+					// {
+					// 	tiele: "梁片管理",
+					// 	url: "/synthesize/bridge/index"
+					// },
+					// {
+					// 	tiele: "智能喷淋",
+					// 	url: "/synthesize/getspray/index"
+					// },
+					// {//上杭
 					// 	tiele: "智慧张拉",
 					// 	url: "/synthesize/smart/index"
 					// }
 				],
 				tatol:localStorage.getItem('newstotal'),
-				username:localStorage.getItem('username')
+				username:localStorage.getItem('username'),
+				svt:'http://192.168.110.39:8081',
+				ishow:false
 			}
 		},
 		mounted() {
@@ -209,14 +221,28 @@
 		methods: {
 			linkTo(to) {
 				if(to == 'management/management_file_content'){
-					this.$alert('功能建设中', {
-					  type:'warning' ,
-					  showConfirmButton:false
-					})
+					
+					let value=localStorage.getItem('tocken')
+					document.cookie = "usertoken=" + value
+					window.open('http://gt.starhope.net/pc')
+					// window.open('https://test.ayingtech.com/pc')
 				}else{
+					this.ishow=false
 					 this.$router.push(to)
 				}
 			},
+			
+			
+			setCookie(c_name, c_pwd, exdays) {
+			      let exdate = new Date(); //获取时间
+			      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
+			      //字符串拼接cookie
+			      window.document.cookie = "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+			      window.document.cookie = "password" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
+			},
+				
+				
+			
 			vto(to){
 				if(to == "水泥搅拌桩"){
 					window.open('https://www.hskj51.com/login','_blank')

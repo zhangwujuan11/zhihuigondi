@@ -232,25 +232,6 @@
 				           fontSize: '10px',
 				           interval: 0,
 				           rotate: rot,
-				           // formatter: function (value)  //X轴的内容
-				           // {
-				           //     var ret = ""; //拼接加\n返回的类目项
-				           //     var max = 8;  //每行显示的文字字数
-				           //     var val = value.length;  //X轴内容的文字字数
-				           //     var rowN = Math.ceil(val / max);  //需要换的行数
-				           //     if (rowN > 1)  //判断 如果字数大于2就换行
-				           //     {
-				           //         for (var i = 0; i < rowN; i++) {
-				           //             var temp = "";  //每次截取的字符串
-				           //             var start = i * max;  //开始截取的位置
-				           //             var end = start + max;  //结束截取的位置
-				           //             temp = value.substring(start, end) + "\n";
-				           //             ret += temp;  //最终的字符串
-				           //         }
-				           //         return ret;
-				           //     }
-				           //     else { return value }
-				           // },
 				       },
 				       axisLine: {
 				           lineStyle: {
@@ -326,7 +307,7 @@
 		margin-top: 10px;
 	}
 	.titlel{
-		height:0px ;
+		height:0px !important;
 	}
 	.chart{
 		margin-bottom: -2vw;

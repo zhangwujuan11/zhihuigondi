@@ -232,6 +232,8 @@
 										.data.accessToken +
 										'"  id="EZUIKitPlayer-video-container" allowfullscreen="true" allow="autoplay" frameborder="0" class="cams_content_row_left_video"></iframe>';
 									this.accessToken = res.data.accessToken;
+									
+									
 								}
 							})
 							this.isonline()

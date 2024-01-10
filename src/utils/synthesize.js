@@ -1,4 +1,5 @@
 import request from '@/utils/request.js'
+import axios from 'axios'
 //梁片信息列表
 export function bridgelist(data){
 	return request({
@@ -299,6 +300,27 @@ export function antiepidemicdetail(data){
 		params:data
 	})
 }
+// // 超声基桩桥梁检测列表
+// export function ultrasonic (data){
+// 	return request({
+// 		url:'/v1/bridge/action/search',
+// 		method:'get',
+// 		params:data
+// 	})
+// }
+
+// 搅拌站
+export function jiaolist(data){
+	return axios({
+		url:'https://gt.starhope.net/beam//v1/laboratory/mixingStation/list',
+		method:'get',
+		params:data,
+		headers:{
+			Authorization:localStorage.getItem('tocken')
+		}
+	})
+}
+
 
 // 项目物料统计表
 export function materialcount(data){

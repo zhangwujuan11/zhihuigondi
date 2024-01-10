@@ -38,12 +38,12 @@
 				<tbody v-if="tabledata">
 					<tr v-for="(item,index) in tabledata" :key="index">
 						<td><el-button type="warning" size="mini" @click="detel(item,index)">删除</el-button></td>
-						<td>{{item.sampleNo}}</td>
-						<td>{{item.variety}}</td>
-						<td>{{item.approachDate}}</td>
-						<td>{{item.samplingDate}}</td>
-						<td>{{item.batchNo}}</td>
-						<td>{{item.amount}}</td>
+						<td> {{item.sampleNo}}</td>
+						<td><el-input v-model="item.variety"/></td>
+						<td><el-input v-model="item.approachDate"/></td>
+						<td><el-input v-model="item.samplingDate"/></td>
+						<td><el-input v-model="item.batchNo"/></td>
+						<td><el-input v-model="item.amount"/></td>
 						<td><span v-if="JSON.parse(item.labDetails)[0]">{{JSON.parse(item.labDetails)[0].Stress}}</span></td>
 						<td><span v-if="JSON.parse(item.labDetails)[1]">{{JSON.parse(item.labDetails)[1].Stress}}</span></td>
 						<td><span v-if="JSON.parse(item.labDetails)[2]">{{JSON.parse(item.labDetails)[2].Stress}}</span></td>
@@ -237,5 +237,9 @@
 	    font-size: 12px;
 	    font-weight: 300;
 	    padding: 5px 0;
+	}
+	/deep/td .el-input__inner{
+		padding: 0 !important;
+		text-align: center;
 	}
 </style>

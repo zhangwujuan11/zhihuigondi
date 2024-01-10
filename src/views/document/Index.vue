@@ -23,7 +23,7 @@
 				class="default_div_file"
 				v-for="(items,index) in childerlist"
 				:key="items.id"
-				@click="openfiler(items.fileAddr)"
+				@click="openfiler(items.fileAddr,items.fileName)"
 				>
 					<img src="@/assets/image/cams/management_files_file.png" alt="">
 					<span>{{items.fileName}}</span>
@@ -81,9 +81,11 @@
 				this.idList.pop()
 				
 			},
-			openfiler(e){
+			openfiler(e,name){
 				if(e != null){
-					window.open(e)
+					let fliytype=e.substring(e.lastIndexOf(".")).toLowerCase()
+					console.log(fliytype)
+					window.open(e+"?attname=" + name + fliytype)
 				}else{
 					this.$message.error('文件地址出错')
 				}

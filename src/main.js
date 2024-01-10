@@ -6,6 +6,11 @@ import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import { Message } from "element-ui"
+// 分页组件
+import Pagination from "@/components/Pagination";
+ElementUI.Dialog.props.lockScroll.default = false;
+
+Vue.component('Pagination', Pagination)
 Vue.use(ElementUI)
 
 

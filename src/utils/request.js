@@ -29,7 +29,24 @@ server.interceptors.request.use(
 //响应拦截
 server.interceptors.response.use(response => {
 	return response.data
+	
+	response.setHeader("Cache-Control","max-age=31536000, must-revalidate");
+	if (fileName.contains(".mp4")) {
+	   response.setContentType("video/mpeg4");
+	}
+	if (fileName.contains(".mp3")) {
+	   response.setContentType("audio/mpeg");
+	   response.setHeader("Accept-Ranges:", "bytes");
+	}
+
+	
+	
+	
+	
 	},
+	
+	
+	
   error => {
     return Promise.reject(error)
     console.log('err' + error)

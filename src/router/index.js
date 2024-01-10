@@ -166,6 +166,11 @@ const routes = [
 			name: 'getspray',
 			component: () => import('@/views/synthesize/getSpray/Index.vue'),
 		},
+		{//综合管理-实时搅拌站
+			path: '/synthesize/stirStation/index',
+			name: 'stirStation',
+			component: () => import('@/views/synthesize/stirStation/index.vue'),
+		}
 	]
  },
  {
