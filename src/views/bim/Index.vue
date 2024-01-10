@@ -208,8 +208,8 @@
 					var options = new BimfaceSDKLoaderConfig();
 					options.viewToken = res.data.viewToken;
 					this.viewToken=res.data.viewToken
-					// options.viewToken = "9d70c632e99a4c979e12bd66691861e0";
-					// this.viewToken="9d70c632e99a4c979e12bd66691861e0"
+					// options.viewToken = "4e313457e26b4e7ea930ac337db33edc";
+					// this.viewToken="4e313457e26b4e7ea930ac337db33edc"
 					initColor().then(data=>{
 						this.colorElements = data.data
 						BimfaceSDKLoader.load( options, that.successCallback,that.failureCallback)
@@ -262,34 +262,6 @@
 					data: this.form,
 					id: this.dependid
 				}).then(res => {
-					// if (res.code == 200) {
-					// 	this.dialogVisible = false
-					// 	this.stakedilog = false
-					// 	this.dlirelode = !this.dlirelode
-					// 	if (this.form.status == 101002) {
-					// 		var color = "#f573cf"
-					// 		if (this.form.securityLevel == '1') {
-					// 			color = "#ffff00"
-					// 		} else if (this.form.securityLevel == '2') {
-					// 			color = "#FF8000"
-					// 		} else if (this.form.securityLevel == '3') {
-					// 			color = "#ff0000"
-					// 		}
-					// 		let building_color = new Glodon.Web.Graphics.Color(color, 0.5)
-					// 		this.model3D.getLayerManager().getLayer('layer_10000802396865').getComponentManager().overrideColor({ids: [this.dependid]}, building_color);
-					// 	} else if (this.form.status == 101003) {
-					// 		let building_color = new Glodon.Web.Graphics.Color("#327d1c", 0.5);
-					// 		this.model3D.getLayerManager().getLayer('layer_10000802396865').getComponentManager().overrideColor({ids: [this.dependid]}, building_color);
-					// 	} else { //移除颜色
-					// 		this.model3D.getLayerManager().getLayer('layer_10000802396865').getComponentManager().restoreColor({ids: [this.dependid]});
-					// 	}
-					// } else {
-					// 	this.$message.error('失败')
-					// }
-					
-					
-					
-					
 					if (res.code == 200) {
 						this.dialogVisible = false
 						this.stakedilog = false
@@ -314,8 +286,6 @@
 					} else {
 						this.$message.error('失败')
 					}
-					
-					
 				})
 			},
 
@@ -348,28 +318,20 @@
 						let mapConfig = new Glodon.Bimface.Plugins.TileMap.MapConfig();
 						mapConfig.viewer = viewer3D;
 						
-						
 						// //上杭
-						// mapConfig.basePoint = {
-						// 	"x": 600000,
-						// 	"y": 180000
-						// };
-						// mapConfig.modelPosition = [116.236467,25.001617]; 
-						// mapConfig.modelAltitude = 0;
-						
-						
-						//福清
-						mapConfig.modelPosition = [119.3636, 25.519]; //福 清
-						mapConfig.modelRotationZ = 215.5 * Math.PI / 180;
-						mapConfig.modelAltitude = 0;
+						mapConfig.basePoint = {
+							"x":999,
+							"y":-800
+						};
+						mapConfig.modelPosition = [116.520085872,25.149213887]; 
+						mapConfig.modelAltitude =1;
+						mapConfig.maxLevel = 20;
+						mapConfig.modelRotationZ = 179.01;
 						let map = new Glodon.Bimface.Plugins.TileMap.Map(mapConfig);
 						map.setMapSource({
 							credit: Glodon.Bimface.Common.Credit.Amap,
 							url: 'https://webst01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=6&x={x}&y={y}&z={z} '
 						})
-						
-						
-						
 						
 						let model3D = viewer3D.getModel()
 						let com_color = new Glodon.Web.Graphics.Color("#327d1c", 0.5);

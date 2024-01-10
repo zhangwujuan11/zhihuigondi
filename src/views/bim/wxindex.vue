@@ -256,23 +256,23 @@
 						mapConfig.viewer = viewer3D;
 						// 设置模型载入的基点
 						// //上杭
-						// mapConfig.basePoint = {
-						// 	"x": 600000,
-						// 	"y": 180000
-						// };
-						// mapConfig.modelPosition = [116.236467,25.001617]; 
-						// mapConfig.modelAltitude = 0;
+						mapConfig.basePoint = {
+							"x": 600000,
+							"y": 180000
+						};
+						mapConfig.modelPosition = [116.236467,25.001617]; 
+						mapConfig.modelAltitude = 0;
 						
 						
 						//福清
-						mapConfig.modelPosition = [119.3636, 25.519]; //福 清
-						mapConfig.modelRotationZ = 215.5 * Math.PI / 180;
-						mapConfig.modelAltitude = 0;
-						let map = new Glodon.Bimface.Plugins.TileMap.Map(mapConfig);
-						map.setMapSource({
-							credit: Glodon.Bimface.Common.Credit.Amap,
-							url: 'https://webst01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=6&x={x}&y={y}&z={z} '
-						})
+						// mapConfig.modelPosition = [119.3636, 25.519]; //福 清
+						// mapConfig.modelRotationZ = 215.5 * Math.PI / 180;
+						// mapConfig.modelAltitude = 0;
+						// let map = new Glodon.Bimface.Plugins.TileMap.Map(mapConfig);
+						// map.setMapSource({
+						// 	credit: Glodon.Bimface.Common.Credit.Amap,
+						// 	url: 'https://webst01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=6&x={x}&y={y}&z={z} '
+						// })
 						
 						
 						

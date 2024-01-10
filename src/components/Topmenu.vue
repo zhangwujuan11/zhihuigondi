@@ -2,10 +2,10 @@
 	<div class="topmenu">
 		<!-- 消息加username -->
 		<div class="menutop">
-			<div class="to-index"></div>
+			<div class="to-index" @click="gohome()"></div>
 			<div class="forright">
 				<!-- 消息 -->
-				<!-- <div class="line" @click="gotopnews()"><span id="newstatol">{{tatol | tatl}}</span></div> -->
+				<div class="line" @click="gotopnews()"><span id="newstatol">{{tatol | tatl}}</span></div>
 				<!-- username -->
 				<el-dropdown>
 					<span class="el-dropdown-link">
@@ -18,9 +18,10 @@
 				</el-dropdown>
 			</div>
 		</div>
-		<!-- <div class="btnbox">
+		<div class="btnbox">
 				<button v-for="(item,index) in menList" :key="index" @click="linkTo(item.url)"
 				:class="{tets: item.active,hasnone:item.pass}">{{item.tiele}}</button>
+				<!-- 综合按钮 -->
 				<el-menu
 				class="el-menu-demo" 
 				mode="horizontal" 
@@ -34,7 +35,7 @@
 						</el-menu-item>
 					</el-submenu>
 				</el-menu>
-		</div> -->
+		</div>
 	</div>
 </template>
 
@@ -109,13 +110,13 @@
 						tiele: "项目简介",
 						url: "/home/projectduction"
 					},
-					{//
-						tiele: "水泥搅拌桩",
+					// {//
+					// 	tiele: "水泥搅拌桩",
 						
-					},{//
-						tiele: "大数据防疫监管中心",
+					// },{//
+					// 	tiele: "大数据防疫监管中心",
 						
-					},
+					// },
 					{
 						tiele: "气象数据管理",
 						url: "/synthesize/weather/index"
@@ -180,10 +181,10 @@
 						tiele: "智能喷淋",
 						url: "/synthesize/getspray/index"
 					},
-					// {
-					// 	tiele: "智慧张拉",
-					// 	url: "/synthesize/smart/index"
-					// }
+					{//上杭
+						tiele: "智慧张拉",
+						url: "/synthesize/smart/index"
+					}
 				],
 				tatol:localStorage.getItem('newstotal'),
 				username:localStorage.getItem('username')
