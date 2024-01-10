@@ -12,7 +12,6 @@ server.interceptors.request.use(
 	config => {
 		const isToken = (config.headers || {}).isToken === false
 		let tocken = localStorage.getItem('tocken')
-		
 		// config.headers['Accept'] = 'application/json'
 		// config.headers['x-requested-with'] = 'XMLHttpRequest'
 		// config.headers['Access-Control-Allow-Origin'] = "*"  

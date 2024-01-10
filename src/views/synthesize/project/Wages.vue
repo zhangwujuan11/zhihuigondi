@@ -299,8 +299,9 @@
 	.control{
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;

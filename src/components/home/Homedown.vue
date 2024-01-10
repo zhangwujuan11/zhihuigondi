@@ -3,7 +3,7 @@
 		<div class="bgbox-m pens">
 			<Titles>
 				<template v-slot:nametext>
-					{{mounthdata}}月日常管理-(分)
+					{{num.echartsValue | echartsValue}}月日常管理-(分)
 				</template>
 			</Titles>
 			<div class="chart" ref="chartone"></div>
@@ -11,7 +11,8 @@
 		<div class="bgbox-m penst">
 			<Titles>
 				<template v-slot:nametext>
-					{{mounthdata}}月施工进度-(万元)
+					{{shigong.echartsValue |echartsValue}}
+					月施工进度-(万元)
 				</template>
 			</Titles>
 			<div class="chart"  ref="charttwo"></div>
@@ -19,7 +20,7 @@
 		<div class="bgbox-m penst">
 			<Titles>
 				<template v-slot:nametext>
-					{{mounthdata}}月质量检查-(次)
+					{{zhiliang.echartsValue |echartsValue}}月质量检查-(次)
 				</template>
 			</Titles>
 			<div class="chart" ref="chartthree"></div>
@@ -29,10 +30,16 @@
 
 <script>
 	import Titles from '@/components/slot/Titles.vue'
-	import {chartdowntwo, chartdownthree} from '@/utils/home'
+	import {chartdowntwo, chartdownthree,dailystatistics} from '@/utils/home'
 	export default {
 		components:{
 			Titles
+		},
+		props:["methods"],
+		filters:{
+			echartsValue(e){
+				return e.substr(e.length-2,2)
+			}
 		},
 		data() {
 			return{
@@ -40,17 +47,28 @@
 				datafrist:{
 					xdata:["大沃段", "东港段", "蓝园D1", "蓝园D2", "三山段", "江阴段"],
 					ydata: [93.8, 96.09, 94.87, 91.84, 94.2, 92.8],
-				}
+				},
+				num:{},
+				zhiliang:{},
+				shigong:{}
 			}
 		},
 		mounted() {
+			
 			this.setMounth()
-			this.echartsInit(this.$refs.chartone,this.datafrist)
-			chartdowntwo().then(res=>{
-				this.setCommonOption(this.$refs.charttwo,res.data)
+			dailystatistics().then(res=>{
+				if(res.code==200){
+					this.datafrist.xdata=res.data.xaxis
+					this.datafrist.ydata=res.data.yaxis
+					this.echartsInit(this.$refs.chartone,this.datafrist)
+					chartdowntwo().then(respon=>{
+						this.setCommonOption(this.$refs.charttwo,respon.data,"13")
+					})
+				}
 			})
+			
 			chartdownthree().then(res=>{
-				this.setCommonOption(this.$refs.chartthree,res.data)
+				this.setCommonOption(this.$refs.chartthree,res.data,"0")
 			})
 		},
 		methods:{
@@ -98,7 +116,7 @@
 					        top: '10%',
 					        left: '3%',
 					        right: '3%',
-					        bottom: '5%',
+					        bottom: '6vw',
 					        containLabel: true
 					    },
 					    yAxis: {
@@ -167,11 +185,11 @@
 			},
 			
 			// 施工进度
-			setCommonOption(box,data) {
+			setCommonOption(box,data,rot) {
 				 var series = []
 				var index = 0;
 				for (var key in data.yaxisSeries) {
-				    var color = ["#23BBEE", "#FFB140"]
+				    var color = ["#23BBEE", "#FFB140",'#c00', '#b4a7d6',"#ffff00","#ea9999","#C6E2FF"]
 				    var dataItem = {
 				        data: data.yaxisSeries[key],
 				        type: 'bar',
@@ -211,28 +229,28 @@
 				       data: data.xaxis,
 				       axisLabel: {
 				           color: '#fff',
-				           fontSize: '12px',
+				           fontSize: '10px',
 				           interval: 0,
-				           rotate: "0",
-				           formatter: function (value)  //X轴的内容
-				           {
-				               var ret = ""; //拼接加\n返回的类目项
-				               var max = 8;  //每行显示的文字字数
-				               var val = value.length;  //X轴内容的文字字数
-				               var rowN = Math.ceil(val / max);  //需要换的行数
-				               if (rowN > 1)  //判断 如果字数大于2就换行
-				               {
-				                   for (var i = 0; i < rowN; i++) {
-				                       var temp = "";  //每次截取的字符串
-				                       var start = i * max;  //开始截取的位置
-				                       var end = start + max;  //结束截取的位置
-				                       temp = value.substring(start, end) + "\n";
-				                       ret += temp;  //最终的字符串
-				                   }
-				                   return ret;
-				               }
-				               else { return value }
-				           },
+				           rotate: rot,
+				           // formatter: function (value)  //X轴的内容
+				           // {
+				           //     var ret = ""; //拼接加\n返回的类目项
+				           //     var max = 8;  //每行显示的文字字数
+				           //     var val = value.length;  //X轴内容的文字字数
+				           //     var rowN = Math.ceil(val / max);  //需要换的行数
+				           //     if (rowN > 1)  //判断 如果字数大于2就换行
+				           //     {
+				           //         for (var i = 0; i < rowN; i++) {
+				           //             var temp = "";  //每次截取的字符串
+				           //             var start = i * max;  //开始截取的位置
+				           //             var end = start + max;  //结束截取的位置
+				           //             temp = value.substring(start, end) + "\n";
+				           //             ret += temp;  //最终的字符串
+				           //         }
+				           //         return ret;
+				           //     }
+				           //     else { return value }
+				           // },
 				       },
 				       axisLine: {
 				           lineStyle: {
@@ -245,7 +263,7 @@
 				       top: '7%',
 				       right: '1%',
 				       left: '1%',
-				       bottom: '5%',
+				       bottom: '6vw',
 				       right: '1%',
 				       left: '1%',
 				       containLabel: true,
@@ -283,6 +301,19 @@
 			   });
 			
 			}
+		},
+		watch:{
+			methods(val){
+				val.map(item=>{
+					if(item.echartsKey == 10001){
+						this.num=item
+					}else if(item.echartsKey == 10004){
+						this.zhiliang=item
+					}else if(item.echartsKey == 10002){
+						this.shigong=item
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -292,14 +323,15 @@
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
+		margin-top: 10px;
 	}
 	.titlel{
 		height:0px ;
 	}
 	.chart{
-		margin-bottom: -30px;
+		margin-bottom: -2vw;
 		margin-top: 10px;
-		height: 115px;
+		height:20vh;
 	}
 	.pens{
 		width: 25%;

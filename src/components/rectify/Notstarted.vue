@@ -20,7 +20,7 @@
 				<p>
 					内容：{{item.context}}
 				</p>
-				<img class="itemimage" v-for="(i,index) in item.images" :key="index" :src="i" fit="fill">
+				<img class="itemimage" v-for="(i,index) in item.images" :key="index" :src="i" fit="fill" @click="showbigimg(i)">
 				<table class="table">
 					<thead style="background-color: #F5F5F5;">
 						<tr>
@@ -51,7 +51,7 @@
 						<div>
 							<p class="block" v-for="(item,index) in item.workflows[key].images" :key="index"
 								style="display: inline-block;">
-								<img style="width: 100px; height: 100px" :src="item" fit="fill">
+								<img style="width: 100px; height: 100px" :src="item" fit="fill" @click="showbigimg(item)">
 							</p>
 						</div>
 						<table class="table">
@@ -76,36 +76,35 @@
 					<div class="addbox" style="width: calc(100% - 40px);margin-bottom: 10px;"
 						v-if="workflow.processorType=='21003'&&workflow.actionCode!='12001'">
 						<p class="addboxtitle">监理方意见</p>
-						<p style="height: 40px">
+						<p  v-if="item.workflows[key].attachments">
 							【{{item.dataType==1?"质量":"安全"}}】隐患点:{{item.hidDangerName}}
-							{{workflow.actionDesc}}
 						</p>
 						<div class="main">
 							<p v-html="workflow.advice"></p>
 							<p class="block" v-for="(item,index) in item.workflows[key].images" :key="index"
 								style="display: inline-block;">
-								<img style="width: 100px; height: 100px" :src="item" fit="fill">
+								<img style="width: 100px; height: 100px" :src="item" fit="fill"  @click="showbigimg(item)">
 							</p>
+							
+							<table class="table" v-if="item.workflows[key].attachments">
+								<thead style="background-color: #F5F5F5;">
+									<tr>
+										<th>附件</th>
+										<th>上传人</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody class="modalTableBody">
+									<tr v-for="(item,index) in item.workflows[key].attachments" :key="index">
+										<td>附件{{index+1}}.pdf</td>
+										<td>暂无</td>
+										<td><span class="vwBtn" @click="openUrl(pdf)">查看</span></td>
+									</tr>
+								</tbody>
+								<p v-if="item.workflows[key].attachments == null" style="text-align: center;width: 100%;color: #ccc;">无附件</p>
+							</table>
 						</div>
 					</div>
-
-					<div class="addbox" style="width: calc(100% - 40px);margin-bottom: 10px;"
-						v-if="workflow.processorType=='21001'&&workflow.actionCode!='12001'">
-						<p class="addboxtitle">业主方意见</p>
-						<div class="main">
-							<p v-html="workflow.advice"></p>
-							<p class="block" v-for="(item,index) in item.workflows[key].images" :key="index"
-								style="display: inline-block;">
-								<img style="width: 100px; height: 100px" :src="item" fit="fill">
-							</p>
-						</div>
-					</div>
-					
-					
-					
-					
-					
-					
 					<div class="constructionbox"
 						v-if="identycode==workflow.processorType && (ruleForm.status == 10000 || ruleForm.status == 10001) && workflow.actionCode=='12001' && fromuserid == currentUserId">
 						<div class="addbox" style="width: calc(100% - 40px);margin-bottom: 10px;">
@@ -125,9 +124,7 @@
 											:on-preview="handlePictureCardPreview" :before-upload="beforeImageUpload"
 											:on-remove="handleRemove.bind(this,index)" :file-list="item.fileListImg">
 											<i slot="default" class="el-icon-upload"></i>
-											<el-dialog append-to-body :visible.sync="dialogVisible">
-												<img width="100%" :src="dialogImageUrl" alt="">
-											</el-dialog>
+											
 										</el-upload>
 									</el-form-item>
 									<el-form-item label="附件">
@@ -153,6 +150,19 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="addbox" style="width: calc(100% - 40px);margin-bottom: 10px;"
+						v-if="workflow.processorType=='21001'&&workflow.actionCode!='12001'">
+						<p class="addboxtitle">业主方意见</p>
+						<div class="main">
+							<p v-html="workflow.advice"></p>
+							<p class="block" v-for="(item,index) in item.workflows[key].images" :key="index"
+								style="display: inline-block;">
+								<img style="width: 100px; height: 100px" :src="item" fit="fill" @click="showbigimg(item)">
+							</p>
+						</div>
+					</div>
+					
 					<div style="height: 80px;text-align: center; padding: 0;"
 					v-if="(workflow.processorType=='21001'||workflow.processorType=='21003')&&(workflow.actionCode=='12001'&& workflow.processorId==currentUserId) && fromuserid != currentUserId">
 						<el-button type="success" @click="clcikAgree(item)">同意</el-button>
@@ -163,7 +173,7 @@
 				</div>
 				
 				<!-- 驳回弹窗 -->
-				<el-dialog :visible.sync="rejectVisible" width="70%" append-to-body title="驳回意见">
+				<el-dialog :visible.sync="rejectVisible" width="70%" append-to-body title="驳回意见" class="paddingmoer">
 					<div style="border: 1px solid #ccc;width:100%;height: 500px;">
 						<div style="border: 1px solid #ccc;" v-if="!agreeVisible">
 							<div id="editor-toolbar" style="border-bottom: 1px solid #ccc;"></div>
@@ -182,7 +192,7 @@
 						<div id="editor-text-area" style="height: 300px"></div>
 					</div>
 					<div slot="footer" class="dialog-footer">
-						<el-button type="success" @click="$store.state.notStarted=false">取消</el-button>
+						<el-button type="success" @click="agreeVisible=false">取消</el-button>
 						<el-button type="primary" @click="agree()">确认同意</el-button>
 					</div>
 				</el-dialog>
@@ -198,6 +208,12 @@
 				@click="reback">撤回整改</el-button>
 			<el-button @click="close">关闭</el-button>
 		</span>
+		
+		
+		<el-dialog append-to-body :visible.sync="dialogVisible">
+			<img width="100%" :src="dialogImageUrl" alt="">
+		</el-dialog>
+		
 	</el-dialog>
 </template>
 
@@ -341,20 +357,11 @@ const { createEditor, createToolbar } = window.wangEditor
 							let arr = []
 							let num = this.ruleForm.problems.length
 							for (let i = 0; i < num; i++) {
-								if(this.ruleForm.problems[i].workflows.length>1){
-									arr.push({
-										advice:this.ruleForm.problems[i].workflows[0].advice,
-										attachments: [],
-										images: []
-									})
-								}else{
-									arr.push({
-										advice: "",
-										attachments: [],
-										images: []
-									})
-								}
-								
+								arr.push({
+									advice: "",
+									attachments: [],
+									images: []
+								})
 							}
 							this.handleForm = arr
 						})
@@ -388,28 +395,15 @@ const { createEditor, createToolbar } = window.wangEditor
 							let arr = []
 							let num = this.ruleForm.problems.length
 							for (let i = 0; i < num; i++) {
-								if(this.ruleForm.problems[i].workflows.length>1){
-									arr.push({
-										advice:this.ruleForm.problems[i].workflows[0].advice,
-										attachments: [],
-										images: []
-									})
-								}else{
-									arr.push({
-										advice: "",
-										attachments: [],
-										images: []
-									})
-								}
+								arr.push({
+									advice: "",
+									attachments: [],
+									images: []
+								})
 								
 							}
 							this.handleForm = arr
 						})
-						
-						
-						
-						
-						
 					}else{
 						this.$message.error(res.message)
 					}
@@ -433,6 +427,11 @@ const { createEditor, createToolbar } = window.wangEditor
 				this.$nextTick(() => {
 					this.setEditor()
 				})
+			},
+			// 显示大图
+			showbigimg(i){
+				this.dialogImageUrl = i;
+				this.dialogVisible = true;
 			},
 			setEditor() {
 				const that=this
@@ -467,27 +466,50 @@ const { createEditor, createToolbar } = window.wangEditor
 			
 			// 施工方处理整改单子问题
 			handelup(val, index) {
-				activehandle({
-					id: val,
-					from: this.handleForm[index]
-				}).then(res => {
-					if (res.code == 200) {
-						this.$message.success("提交成功")
-						let _arr = []
-						this.handleForm.forEach((item)=>{
-						    _arr.push(item.advice)
-						})
-						if(_arr.some(val => val === '')){
-						    this.$store.state.notStarted = true
-						}else{
-						    this.$store.state.notStarted = false
-						    this.reload()
+				console.log(this.handleForm[index].advice)
+				if(this.handleForm[index].advice == ""){
+					this.$message.error("提交失败，处理内容不能为空")
+					return false
+				}else{
+					activehandle({
+						id: val,
+						from: this.handleForm[index]
+					}).then(res => {
+						if (res.code == 200) {
+							this.$message.success("问题处理成功")
+							// let _arr = []
+							// this.handleForm.forEach((item)=>{
+							//     _arr.push(item.advice)
+							// })
+							// if(_arr.some(val => val === '')){
+							//     this.$store.state.notStarted = true
+							// }else{
+							//     this.$store.state.notStarted = false
+							//     this.reload()
+							// }
+							reformeid(this.ruleForm.rectifyId).then(res => {
+								this.ruleForm = res.data
+								this.fromuserid=res.data.processorId
+								this.initiatorId=res.data.initiatorId
+								let arr = []
+								let num = this.ruleForm.problems.length
+								for (let i = 0; i < num; i++) {
+									arr.push({
+										advice: "",
+										attachments: [],
+										images: []
+									})
+								}
+								this.handleForm = arr
+							})
+							
+						} else {
+							this.$message.error(res.message)
 						}
-						
-					} else {
-						this.$message.error(res.message)
-					}
-				})
+					}).catch(()=>{
+						this.$message.error("提交失败，处理内容不能为空")
+					})
+				}
 			},
 			change() {
 				this.$forceUpdate()
@@ -562,7 +584,7 @@ const { createEditor, createToolbar } = window.wangEditor
 				}).catch(() => {
 					this.$message({
 						type: 'info',
-						message: '已取消删除'
+						message: '已取消撤回整改'
 					});
 				});
 			},
@@ -616,7 +638,6 @@ const { createEditor, createToolbar } = window.wangEditor
 			// 关闭
 			close(){
 				this.$store.state.notStarted=false
-				this.reload()
 			}
 			
 
@@ -630,19 +651,19 @@ const { createEditor, createToolbar } = window.wangEditor
 					let arr = []
 					let num = this.ruleForm.problems.length
 					for (let i = 0; i < num; i++) {
-						if(this.ruleForm.problems[i].workflows.length>1){
-							arr.push({
-								advice:this.ruleForm.problems[i].workflows[0].advice,
-								attachments: [],
-								images: []
-							})
-						}else{
+						// if(this.ruleForm.problems[i].workflows.length>1){
+							// arr.push({
+							// 	advice:this.ruleForm.problems[i].workflows[0].advice,
+							// 	attachments: [],
+							// 	images: []
+							// })
+						// }else{
 							arr.push({
 								advice: "",
 								attachments: [],
 								images: []
 							})
-						}
+						// }
 						
 					}
 					this.handleForm = arr
@@ -653,8 +674,7 @@ const { createEditor, createToolbar } = window.wangEditor
 </script>
 <style scoped>
 	/deep/ .el-dialog__header {
-		padding: none !important;
-		padding: 0;
+		padding: 10px;
 	}
 
 	.addbox {
@@ -688,7 +708,6 @@ const { createEditor, createToolbar } = window.wangEditor
 		width: 96% !important;
 		margin: 20px auto;
 	}
-
 	.vwBtn {
 		cursor: pointer;
 		font-size: 14px;

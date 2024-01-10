@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-	   <Topmenu ></Topmenu>
+	   <Topmenu v-if="showtop"></Topmenu>
 	<router-view v-if="isRouterAlive"/>
   </div>
 </template>
 <script>
 	import Topmenu from '@/components/Topmenu'
-	// import {getUserInfo} from '@/utils/comm'
+	import wx from "weixin-js-sdk"
 	export default {
 	 provide(){//刷新
 			return{
@@ -19,7 +19,8 @@
 	  data() {
 	  	return{
 			 isRouterAlive:true,
-			 username:''
+			 username:'',
+			 showtop:true
 		}
 	  },
 	  created() {
@@ -27,6 +28,13 @@
 	  mounted() {
 	  },
 	  watch:{
+			$route(to , from){
+			 if(to.path =='/bim/wxindex' ){
+				 this.showtop=false
+			 }else{
+				  this.showtop=true
+			 }
+			}
 	  },
 	  methods:{
 		  reload(){

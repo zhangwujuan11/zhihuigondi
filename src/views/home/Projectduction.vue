@@ -1,7 +1,7 @@
 <template>
 	<div class="projec">
 		<div class="projeccon">
-			<h3>项目简介</h3>
+			<h3>{{title}}</h3>
 			<p class="jianjietop">{{titlelist.content | content}}</p>
 			<ul>
 				<li v-for="(item,index) in datalist" :key="index">
@@ -24,15 +24,17 @@
 		data() {
 			return{
 				titlelist:{},
-				datalist:[]
+				datalist:[],
+				title:''
 			}
 		},
 		mounted() {
 			homnescon().then(res=>{
 				//this.realtime=res.data.items[0].content.replace(/<[^>]+>/g,"")
 				let list=res.data.items
+				this.title=res.data.items[0].title
 				for(let i=0;i<list.length;i++){
-					if(list[i].title == '项目简介'){
+					if(i == 0){
 						this.titlelist=list[i]
 						list.splice(i,1) 
 					}

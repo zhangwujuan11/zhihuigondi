@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = {
 
-	publicPath: process.env.NODE_ENV == 'development' ? '/front-vue/' : '/front-vue/',
+	publicPath: process.env.NODE_ENV == 'development' ? '/' : '/',
 	// configureWebpack: {
 	// 	experiments: {
 	// 	  asyncWebAssembly: true,

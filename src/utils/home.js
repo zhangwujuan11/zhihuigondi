@@ -27,10 +27,11 @@ export function charttwo(){
 		method:'get'
 	})
 }
-export function chaetthree(){
+export function chaetthree(data){
 	return request({
 		url:'/v1/human/workers/salary/workers/statistics',
-		method:"get"
+		method:"get",
+		params:data
 	})
 }
 export function chartfour(){
@@ -39,17 +40,19 @@ export function chartfour(){
 		method:'get'
 	})
 }
-export function chartdowntwo(){
+export function chartdowntwo(data){
 	return request({
 		url:'v1/homepage/buildProgress/statistics',
-		method:'get'
+		method:'get',
+		params:data
 	})
 }
 
-export function chartdownthree(){
+export function chartdownthree(data){
 	return request({
 		url:'v1/homepage/rectifies/statistics',
-		method:'get'
+		method:'get',
+		params:data
 	})
 }
 
@@ -98,6 +101,30 @@ export function cams(data){
 export function camslist (data){
 	return request({
 		url:'front/v1/camera/list/1',
+		method:'get'
+	})
+}
+// 日常管理柱状图
+export function dailystatistics(){
+	return request({
+		url:'/v1/homepage/daily/statistics',
+		method:'get'
+	})
+}
+// 党员非党员
+export function partyecharts(){
+	return request({
+		url:'/v1/partyMemberManagement/actions/echarts',
+		method:'get'
+	})
+}
+
+
+
+// echart获取日期
+export function serchall(data){
+	return request({
+		url:'/v1/echartsManagement/list',
 		method:'get'
 	})
 }

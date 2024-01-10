@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="混凝土抗压试验" :visible.sync="$store.state.teamtablecon" width="90%">
+	<el-dialog title="混凝土抗压试验" :visible.sync="$store.state.teamtablecon" width="90%" @close="closed">
 		<div>
 			<ul class="testul">
 				<li>
@@ -108,7 +108,7 @@
 				</tr>
 			</table>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="$store.state.teamtablecon = false">关 闭</el-button>
+				<el-button @click="closed">关 闭</el-button>
 				<el-button type="primary"  @click="sub">提 交</el-button>
 			</span>
 		</div>
@@ -149,6 +149,7 @@
 			},
 			// 选择
 			churs(item,index){
+				item.sampleNo=this.info.sampleNo
 				this.tabledata.push(item)
 				this.tabledataserch.splice(index,1)
 			},
@@ -165,6 +166,22 @@
 				}).catch(()=>{
 					this.$message.error("失败")
 				})
+			},
+			closed(){
+				concredetait({
+					sampleNo:this.rebartable,
+					depid:this.depid
+				}).then(res=>{
+					this.tabledata=res.data.items
+				})
+				concredetaith({
+					sampleNo:this.rebartable,
+					depid:this.depid,
+					serch:''
+				}).then(res=>{
+					this.tabledataserch=res.data.items
+				})
+				this.$store.state.teamtablecon = false
 			}
 		},
 		watch:{

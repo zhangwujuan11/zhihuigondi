@@ -2,10 +2,10 @@
 	<div class="topmenu">
 		<!-- 消息加username -->
 		<div class="menutop">
-			<div class="to-index" @click="gohome()"></div>
+			<div class="to-index"></div>
 			<div class="forright">
 				<!-- 消息 -->
-				<div class="line" @click="gotopnews()"><span id="newstatol">{{tatol | tatl}}</span></div>
+				<!-- <div class="line" @click="gotopnews()"><span id="newstatol">{{tatol | tatl}}</span></div> -->
 				<!-- username -->
 				<el-dropdown>
 					<span class="el-dropdown-link">
@@ -18,14 +18,12 @@
 				</el-dropdown>
 			</div>
 		</div>
-		<div class="btnbox">
+		<!-- <div class="btnbox">
 				<button v-for="(item,index) in menList" :key="index" @click="linkTo(item.url)"
 				:class="{tets: item.active,hasnone:item.pass}">{{item.tiele}}</button>
-				<!-- 综合按钮 -->
 				<el-menu
 				class="el-menu-demo" 
 				mode="horizontal" 
-				menu-trigger="click" 
 				@select="handleSelect"
 				active-text-color="#00FFFF"
 				router
@@ -36,11 +34,15 @@
 						</el-menu-item>
 					</el-submenu>
 				</el-menu>
-		</div>
+		</div> -->
 	</div>
 </template>
 
 <script>
+	// localstorage深度监听
+	import Vue from 'vue'
+	import tool from "@/utils/tool";
+	Vue.use(tool);
 	export default {
 		inject:["reload"],
 		filters:{
@@ -54,7 +56,6 @@
 		},
 		data() {
 			return {
-				username:localStorage.getItem('username'),
 				menList: [{
 							tiele: "工地党建",
 							url: "/home/partybuild",
@@ -108,11 +109,10 @@
 						tiele: "项目简介",
 						url: "/home/projectduction"
 					},
-					{
+					{//
 						tiele: "水泥搅拌桩",
 						
-					},
-					{
+					},{//
 						tiele: "大数据防疫监管中心",
 						
 					},
@@ -176,20 +176,33 @@
 						tiele: "梁片管理",
 						url: "/synthesize/bridge/index"
 					},
+					{
+						tiele: "智能喷淋",
+						url: "/synthesize/getspray/index"
+					},
+					// {
+					// 	tiele: "智慧张拉",
+					// 	url: "/synthesize/smart/index"
+					// }
 				],
-				tatol:0
+				tatol:localStorage.getItem('newstotal'),
+				username:localStorage.getItem('username')
 			}
 		},
 		mounted() {
-			let _this=this;
+			let that=this
 			window.addEventListener("setItemEvent",function(e){
 			    if(e.key==="username"){
-			        _this.username=e.newValue;
+					that.$nextTick(()=>{
+						 that.username=e.newValue
+					})
 			    }
 			})
 			window.addEventListener("setItemEvent",function(e){
-			    if(e.key==="newstotal"){
-			        _this.tatol=e.newValue;
+			    if(e.key=="newstotal"){
+					that.$nextTick(()=>{
+						that.tatol=e.newValue;
+					})
 			    }
 			})
 		},

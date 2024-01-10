@@ -19,11 +19,22 @@ export default new Vuex.Store({
 	  mangentup:false,//项目成员管理导入
 	  wokerdilog:false,//考勤管理详情
 	  teamtable:false,//实验table
-	  teamtablecon:false,
+	  teamtablecon:false,//实验table2
+	  // axiosArr: []//路由守卫的结束请求数据
   },
   getters: {
   },
   mutations: {
+	  // setAxiosArr (state, cancelAjax) {
+	  //       state.axiosArr.push(cancelAjax.cancelToken)
+	  //     },
+	  // clearAxiosArr (state) {
+	  //       let message = '路由切换中断异步请求'
+	  //       state.axiosArr.forEach(item => {
+	  //         item()
+	  //       })
+	  //       state.axiosArr = []
+	  //     }
   },
   actions: {
   },

@@ -7,6 +7,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import { Message } from "element-ui"
 Vue.use(ElementUI)
+
+
+
+
+
 const $message = options => {
   return Message({
     ...options,
@@ -32,6 +37,15 @@ Vue.prototype.$message = $message;
 //如果用要使用 `this.$message.closeAll()`则加上下面
 Vue.prototype.$message.closeAll =Message.closeAll;
 
+
+// 解决router报错
+import Router from 'vue-router'
+const routerPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+return routerPush.call(this, location).catch(error=> error)
+}
+
+
 import * as echarts from 'echarts';
 //需要挂载到Vue原型上
 Vue.prototype.$echarts = echarts
@@ -46,9 +60,6 @@ Vue.config.productionTip = false
 
 // 路由守卫
 import './permission.js'
-// loco监听
-import tool from "./utils/tool";
-Vue.use(tool);
 
 new Vue({
   router:router,

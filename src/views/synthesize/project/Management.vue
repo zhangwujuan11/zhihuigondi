@@ -514,7 +514,7 @@
 				});
 			},
 			waork(){
-				this.$message.warning("模板不存在！")
+				window.location.href = "https://wisdom-fq-g228.obs.cn-east-3.myhuaweicloud.com:443/aiying/import/moban/xmcy.xlsx"
 			}
 		},
 	}
@@ -547,8 +547,9 @@
 	.control{
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;

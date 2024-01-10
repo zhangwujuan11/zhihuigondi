@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="钢筋抗压试验" :visible.sync="$store.state.teamtable" width="90%">
+	<el-dialog title="钢筋抗压试验" :visible.sync="$store.state.teamtable" width="90%"  @close="closed">
 		<div>
 			<ul class="testul">
 				<li>
@@ -42,22 +42,22 @@
 					<tr v-for="(item,index) in tabledata" :key="index">
 						<td><el-button type="warning" size="mini" @click="detai(item,index)">删除</el-button></td>
 						<td><el-input v-model="item.reportId"></el-input></td>
-						<td><el-input v-model="item.age"></el-input></td>
+						<td><el-input v-model="item.age" disabled></el-input></td>
 						<td><el-input v-model="item.batchNo"></el-input></td>
-						<td><el-input v-model="item.amount"></el-input></td>
-						<td><el-input v-model="item.syStatus"></el-input></td>
-						<td><el-input v-model="item.para"></el-input></td>
+						<td><el-input v-model="item.amount" disabled></el-input></td>
+						<td><el-input v-model="item.syStatus" disabled></el-input></td>
+						<td><el-input v-model="item.para" disabled></el-input></td>
 						<td><el-input v-model="item.sampleNo"></el-input></td>
-						<td><el-input v-model="item.beginTime"></el-input></td>
-						<td><el-input v-model="item.duration"></el-input></td>
-						<td><el-input v-model="item.equipmentRange"></el-input></td>
-						<td><el-input v-model="item.forceUnit"></el-input></td>
-						<td><el-input v-model="item.maxForce"></el-input></td>
-						<td><el-input v-model="item.yield"></el-input></td>
-						<td><el-input v-model="item.tensile"></el-input></td>
-						<td><el-input v-model="item.rp02"></el-input></td>
-						<td><el-input v-model="item.rb"></el-input></td>
-						<td><el-input v-model="item.name"></el-input></td>
+						<td><el-input v-model="item.beginTime" disabled></el-input></td>
+						<td><el-input v-model="item.duration" disabled></el-input></td>
+						<td><el-input v-model="item.equipmentRange" disabled></el-input></td>
+						<td><el-input v-model="item.forceUnit" disabled></el-input></td>
+						<td><el-input v-model="item.maxForce" disabled></el-input></td>
+						<td><el-input v-model="item.yield" disabled></el-input></td>
+						<td><el-input v-model="item.tensile" disabled></el-input></td>
+						<td><el-input v-model="item.rp02" disabled></el-input></td>
+						<td><el-input v-model="item.rb" disabled></el-input></td>
+						<td><el-input v-model="item.name" disabled></el-input></td>
 					</tr>
 				</tbody>
 				
@@ -126,7 +126,7 @@
 				</tr>
 			</table>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="$store.state.teamtable = false">关 闭</el-button>
+				<el-button @click="closed">关 闭</el-button>
 				<el-button type="primary"  @click="sub">提 交</el-button>
 			</span>
 		</div>
@@ -184,6 +184,23 @@
 				}).catch(()=>{
 					this.$message.error("失败")
 				})
+			},
+			closed(){
+				rebardetailt({
+					sampleNo:this.rebartable,
+					depid:this.depid
+				}).then(res=>{
+					this.tabledata=res.data.items
+				})
+				
+				rebardetailh({
+					sampleNo:this.rebartable,
+					depid:this.depid,
+					serch:''
+				}).then(res=>{
+					this.tabledataserch=res.data.items
+				})
+				this.$store.state.teamtable = false
 			}
 		},
 		watch:{

@@ -43,6 +43,7 @@
 
 <script>
 	import {login,getUserInfo,news} from '@/utils/comm.js'
+	import wx from "weixin-js-sdk"
 	  export default {
 		  inject:["reload"],
 	    data() {
@@ -76,6 +77,23 @@
 	        }
 	      };
 	    },
+		mounted(){
+			// let ua = window.navigator.userAgent.toLowerCase();
+			// let that = this;
+			// if (ua.match(/MicroMessenger/i) == "micromessenger") {
+			//   //微信环境下
+			//   wx.miniProgram.getEnv(function (res) {
+			// 	if (res.miniprogram) {
+			// 		alert("that.$route.query.expireTime")
+			// 	  // 小程序环境下逻辑
+			// 	  localStorage.setItem('tocken','Bearer '+ that.$route.query.token)
+			// 	  localStorage.setItem('expireTime',that.$route.query.expireTime)
+			// 	  that.$router.push('/bim/index')
+			// 	  alert(that.$route.query.expireTime)
+			// 	} 
+			//   })
+			// }
+		},
 	    methods: {
 	      submitForm(formName) {
 	        this.$refs[formName].validate((valid) => {

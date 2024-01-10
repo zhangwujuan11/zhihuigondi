@@ -11,10 +11,10 @@ html,body{
 }
 body::-webkit-scrollbar { width: 0 !important }
 html::-webkit-scrollbar { width: 0 !important }
-body{
+body,html{
 	background: url("@/assets/image/bg.png") no-repeat;
-	    background-size: 100% 100%;
-	    min-height: 100vh;
+	background-size: 100% 100%;
+	min-height: 100vh;
 }
 .maincon{
 	width: calc(100% - (1.45833vw * 2));
@@ -31,7 +31,7 @@ body{
 	    content: "";
 	    display: block;
 	    width: 100%;
-	    height: 2.2396vw;
+	    height: 3.2396vw;
 		background: url("~@/assets/image/panel-item-bootom.png") no-repeat;
 		background-size: 100% 100%;
 		margin-bottom: -10px;

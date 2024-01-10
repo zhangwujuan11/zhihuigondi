@@ -7,6 +7,15 @@
 			<template v-slot:contont>
 			   <div>
 				  <div class="control">
+					    <el-date-picker
+					         v-model="dateserch"
+					         type="daterange"
+							 format="yyyy 年 MM 月 dd 日"
+							 value-format="yyyy-MM-dd"
+					         range-separator="至"
+					         start-placeholder="开始日期"
+					         end-placeholder="结束日期">
+					    </el-date-picker>
 						<div class="elserch">
 						  <el-input placeholder="请输入搜索内容" v-model="serdata" class="input-with-select">
 						    <el-button slot="append" @click="serchdata">搜索</el-button>
@@ -42,11 +51,11 @@
 							<img :src="scope.row.faceImg">
 						</template>
 					   </el-table-column>
-					   <el-table-column
-					   width="150"
-					     prop="createTime"
-					     label="时间">
-					   </el-table-column>
+					  <el-table-column
+					  width="150"
+					    prop="scandatetime"
+					    label="检测时间">
+					  </el-table-column>
 					   <el-table-column
 					     prop="name"
 					     label="名字">
@@ -64,18 +73,18 @@
 					     prop="cardNo"
 					     label="身份证">
 					   </el-table-column>
-					   <el-table-column
+					  <!-- <el-table-column
 					     label="健康码颜色">
 						 绿色
 					   </el-table-column>
 					   <el-table-column
 					     prop="temperature"
 					     label="体温">
-					   </el-table-column>
+					   </el-table-column> -->
 					   <el-table-column
 					   width="150"
-					     prop="scandatetime"
-					     label="检测时间">
+					     prop="createTime"
+					     label="上报时间">
 					   </el-table-column>
 				     </el-table>
 					 <el-pagination background @current-change="handleCurrentChange" :current-page="currentPage"
@@ -114,24 +123,52 @@
 				PageSize: 20,// 默认每页显示的条数（可修改）
 				wokerdilog:false,
 				wokerdilogtwo:false,//修改dilog
+				dateserch:[
+					
+				]
 		      }
 		    },
 		mounted() {
-			// 列表
-			faceAttendance({
-				pageSize:20,
-				pageNum:1,
-				orderByColumn:'id',
-				isAsc:'desc',
-				keyWord:''
-			}).then(res=>{
-				this.tableData=res.items
-				this.totalCount=res.total
-			}).catch(()=>{
-				this.$message.error('请求错误')
+			
+			
+			this.timestampToTimeD(new Date(new Date().toLocaleDateString()).getTime() - 7 * 24 * 3600 * 1000)
+			// this.timestampTD()
+			this.timestampToTimeD(new Date().valueOf())
+			this.$nextTick(()=>{
+				// 列表
+				faceAttendance({
+					pageSize:20,
+					pageNum:1,
+					orderByColumn:'id',
+					isAsc:'desc',
+					keyWord:'',
+					startime:this.dateserch[0] + " 00:00:00",
+					endtime:this.dateserch[1]+ " 23:59:59"
+				}).then(res=>{
+					this.tableData=res.items
+					this.totalCount=res.total
+				}).catch(()=>{
+					this.$message.error('请求错误')
+				})
 			})
 		},
 		methods:{
+			timestampToTimeD(timestamp) {
+			var date=new Date(timestamp)
+			var Y = date.getFullYear() + '-';
+			var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-';
+			var D = (date.getDate()< 10 ? '0'+date.getDate():date.getDate());
+			let strDate = Y + M + D 
+			this.dateserch.push(strDate)
+			},
+			// timestampTD() {
+			// var date=new Date()
+			// var Y = date.getFullYear() + '-';
+			// var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-';
+			
+			// let str = Y + M + 1
+			// this.dateserch.push(str)
+			// },
 			// 显示第几页
 			handleCurrentChange(val) {
 				faceAttendance({
@@ -139,7 +176,9 @@
 					pageNum:val,
 					orderByColumn:'id',
 					isAsc:'desc',
-					keyWord:this.serdata
+					keyWord:this.serdata,
+					startime:this.dateserch[0] + " 00:00:00",
+					endtime:this.dateserch[1]+ " 23:59:59"
 				}).then(res=>{
 					this.tableData=res.items
 					this.totalCount=res.total
@@ -154,7 +193,9 @@
 					pageNum:1,
 					orderByColumn:'id',
 					isAsc:'desc',
-					keyWord:this.serdata
+					keyWord:this.serdata,
+					startime:this.dateserch[0] + " 00:00:00",
+					endtime:this.dateserch[1]+ " 23:59:59"
 				}).then(res=>{
 					this.tableData=res.items
 					this.totalCount=res.total
@@ -162,7 +203,25 @@
 					this.$message.error('请求错误')
 				})
 			}
-		}
+		},
+		// watch:{
+		// 	dateserch(val){
+		// 		faceAttendance({
+		// 			pageSize:20,
+		// 			pageNum:1,
+		// 			orderByColumn:'id',
+		// 			isAsc:'desc',
+		// 			keyWord:this.serdata,
+		// 			startime:val[0],
+		// 			endtime:val[1]
+		// 		}).then(res=>{
+		// 			this.tableData=res.items
+		// 			this.totalCount=res.total
+		// 		}).catch(()=>{
+		// 			this.$message.error('请求错误')
+		// 		})
+		// 	}
+		// }
 	}
 </script>
 
@@ -193,8 +252,9 @@
 	.control{
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;
@@ -276,5 +336,8 @@
 	}
 	.el-icon-circle-close:hover{
 		color: white;
+	}
+	/deep/.el-range-editor.el-input__inner{
+		padding: 0px 10px;
 	}
 </style>

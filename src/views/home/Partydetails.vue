@@ -22,7 +22,7 @@
 			builddetail(this.$route.query.id).then(res=>{
 				this.detaildata=res
 				document.getElementById("deedtetx").innerHTML=res.mfte
-				console.log(res.mfte)
+				// console.log(res.mfte)
 			})
 		},
 		methods:{

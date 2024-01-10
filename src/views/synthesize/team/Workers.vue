@@ -7,7 +7,7 @@
 			<template v-slot:contont>
 			   <div>
 				   <div class="control">
-					   <el-button type="primary" @click="$router.back()">上一级</el-button>
+					   <el-button type="primary" @click="backgo">上一级</el-button>
 					   <el-button type="primary" @click="$store.state.uplodezip=true">导入</el-button>
 					   <el-button type="primary" @click="$store.state.uploadheader=true">头像导入</el-button>
 					    <el-button type="warning" @click="addwid()">新增</el-button>
@@ -178,12 +178,11 @@
 		    <el-form-item label="姓名" prop="workerName">
 		      <el-input v-model="ruleForm.workerName"></el-input>
 		    </el-form-item>
-		    <!-- <el-form-item label="劳动队伍" prop="region">
-		      <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-		        <el-option label="区域一" value="shanghai"></el-option>
-		        <el-option label="区域二" value="beijing"></el-option>
+		    <el-form-item label="劳动队伍" prop="deptId">
+		      <el-select v-model="ruleForm.deptId" placeholder="请选择活动区域" style="left: 0;">
+		        <el-option v-for="(item,index) in option" :label="item.deptName" :value="Number(item.deptId) "></el-option>
 		      </el-select>
-		    </el-form-item> -->
+		    </el-form-item>
 		    <el-form-item label="性别" prop="gender">
 		      <el-input v-model="ruleForm.gender"></el-input>
 		    </el-form-item>
@@ -225,7 +224,7 @@
 		  </el-form>
 		  <span slot="footer" class="dialog-footer">
 		    <el-button @click="wokerdilogchange = false">关 闭</el-button>
-		    <el-button type="primary" @click="submit('ruleForm')">提 交</el-button>
+		    <el-button type="primary" @click="changerowsub('ruleForm')">提 交</el-button>
 		  </span>
 		</el-dialog>
 		
@@ -235,7 +234,7 @@
 <script>
 	import Titlel from '@/components/slot/Titlel.vue'
 	import Uplodezip from '@/components/team/Uplodezip.vue'
-	import {workerName,workerserch, addwokers, deletwokers} from '@/utils/synthesize.js'
+	import {workerName, addwokers, deletwokers,buildingUnits,Unitsopdata} from '@/utils/synthesize.js'
 	import { Loading } from 'element-ui';
 	export default{
 		inject:["reload"],
@@ -277,7 +276,8 @@
 				 telephone: [{ required: true, message: '请输入', trigger: 'blur' }],
 				 typeOfWork: [{ required: true, message: '请输入', trigger: 'blur' }],
 				 workerName: [{ required: true, message: '请输入', trigger: 'blur' }]
-				}
+				},
+				option:[]
 		      }
 		    },
 		mounted() {
@@ -294,6 +294,9 @@
 				this.totalCount=res.data.total
 			}).catch(()=>{
 				this.$message.error('请求错误')
+			})
+			buildingUnits(this.$route.query.grandeid).then(res=>{
+				this.option=res.data.items
 			})
 		},
 		methods:{
@@ -313,7 +316,7 @@
 			serchdata(){
 				workerName({
 					limit:20,
-					offset:1,
+					offset:0,
 					deptId:this.parentid,
 					workerName:this.serdata
 				}).then(res=>{
@@ -328,7 +331,7 @@
 				// 改变默认的页数
 				workerName({
 					limit:20,
-					offset:20*(val - 1),
+					offset:(val - 1) *20,
 					deptId:this.parentid,
 					workerName:''
 				}).then(res=>{
@@ -339,6 +342,7 @@
 				})
 				this.currentPage = val
 			},
+			// 新增
 			submit(formName){
 				this.$refs[formName].validate((valid) => {
 				  if (valid) {
@@ -364,10 +368,31 @@
 				this.ruleForm=i
 				this.wokerdilogchange=true
 			},
+			changerowsub(formName){
+				this.$refs[formName].validate((valid) => {
+				  if (valid) {
+					  Unitsopdata(this.ruleForm).then(res=>{
+						  if(res.code == 200){
+							 this.wokerdilog = false
+							 this.$message.success("修改成功")
+							 this.reload()
+						  }else{
+							 this.$message.error(res.data.detail) 
+						  }
+					  }).catch(()=>{
+						  this.$message.error("失败") 
+					  })
+				  } else {
+					console.log('error submit!!');
+					return false;
+				  }
+				});
+			},
+			
 			addwid(){
 				this.ruleForm={
 				 	"age": null,
-				 	"deptId": "",
+				 	"deptId":this.$route.query.parentid,
 				 	"entryDate": 0,
 				 	"gender": "",
 				 	"home": "",
@@ -397,6 +422,18 @@
 					message: '已取消删除'
 				  });          
 				});
+			},
+			// 返回上一级
+			backgo(){
+				this.$router.push({
+					path:'/synthesize/team/index',
+					query:{
+						isback:true,
+						grandeid:this.$route.query.grandeid,
+						type:1
+					}
+					
+				})
 			}
 			
 		}
@@ -430,8 +467,9 @@
 	.control{
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;

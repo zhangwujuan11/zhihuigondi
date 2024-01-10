@@ -4,34 +4,23 @@
 			<div id="domId"></div>
 			<div id="bim-ele-detail-table"></div>
 			<!-- 构建列表 -->
-			<el-drawer :modal="false" :visible.sync="drawer" direction="ltr" :wrapperClosable="false">
+			<!-- <el-drawer :modal="false" :visible.sync="drawer" direction="ltr" :wrapperClosable="false">
 				<Progress :list='list' @sondata="meetfunction" :dlirelode="dlirelode"></Progress>
-				<!-- 分页 -->
-				<!--  <el-pagination
-			    background
-			    v-if="total > 4"
-			    @current-change="whatepage"
-			    :current-page.sync="currentPage"
-			    layout="prev, pager, next, jumper"
-			    :page-size="4"
-			    :total="total">
-			  </el-pagination> -->
 			</el-drawer>
 			<el-button @click="dra()" type="primary" class="oldtable">
 				构件列表<i class="el-icon-d-arrow-right"></i>
-			</el-button>
-
+			</el-button> -->
 			<!-- 堆积图 -->
-			<el-drawer title="建设堆积图" :visible.sync="drawertwo" direction="ltr">
+			<!-- <el-drawer title="建设堆积图" :visible.sync="drawertwo" direction="ltr">
 				<div ref="main" style="width:100%;height:80%;"></div>
 			</el-drawer>
 			<el-button @click="drawert()" type="primary" class="newtable">
 				堆积图<i class="el-icon-d-arrow-right"></i>
-			</el-button>
+			</el-button> -->
 			
-			<el-button  type="primary" class="newtablet" @click="bintvshow" v-if="tvishave">
+			<!-- <el-button  type="primary" class="newtablet" @click="bintvshow" v-if="tvishave">
 				{{titlitv}}<i class="el-icon-d-arrow-right"></i>
-			</el-button>
+			</el-button> -->
 
 
 			<el-dialog title="" :modal="false" :visible.sync="dialogVisible" width="100%" :close-on-click-modal="false"
@@ -78,23 +67,22 @@
 				<div class="stakedilog" v-if="stakedilog">
 					<p class="titles">桩检数据详情</p>
 					<div class="morep" v-if="stakeinfo">
-						<!-- <p>混凝土强度:{{stakeinfo.concreteStrength}}</p> -->
-						<p>检测时间:{{stakeinfo.testTime | testTime}}</p>
-						<p>报告: <sapn @click="godownlid(stakeinfo.dataFile)" style="color: skyblue;cursor: pointer;">查看</sapn></p>
-					<!-- 	<p>部门名称:{{stakeinfo.deptName}}</p>
+						<p>混凝土强度:{{stakeinfo.concreteStrength}}</p>
+						<p>创建时间:{{stakeinfo.createDate}}</p>
+						<p>数据文件:{{stakeinfo.dataFile}}</p>
+						<p>部门名称:{{stakeinfo.deptName}}</p>
 						<p>GPS状态:{{stakeinfo.gpsIsValid}}</p>
 						<p>GPS维度:{{stakeinfo.gpsLatitude}}</p>
 						<p>GPS经度:{{stakeinfo.gpsLongitude}}</p>
-						<p>设备编号:{{stakeinfo.machineId}}</p> -->
+						<p>设备编号:{{stakeinfo.machineId}}</p>
 						<p>桩径:{{stakeinfo.pileDiameter}}</p>
 						<p>桩长:{{stakeinfo.pileLength}}</p>
 						<p>桩号:{{stakeinfo.pileNo}}</p>
-						<p>桩顶初测点标高(m):{{stakeinfo.concreteStrength}}</p>
-						<p>检测结果（类型/判定）:{{stakeinfo.machineId}}/{{stakeinfo.serialNo}}</p>
-						<!-- <p>检测流水号:{{stakeinfo.serialNo}}</p> -->
-						<!-- <p>测点间距:{{stakeinfo.step}}</p> -->
-						<!-- <p>测试时间:{{stakeinfo.testTime}}</p> -->
-						<!-- <p>声测管数量:{{stakeinfo.tubeCount}}</p> -->
+						<p>检测的剖面数量:{{stakeinfo.sectionCount}}</p>
+						<p>检测流水号:{{stakeinfo.serialNo}}</p>
+						<p>测点间距:{{stakeinfo.step}}</p>
+						<p>测试时间:{{stakeinfo.testTime}}</p>
+						<p>声测管数量:{{stakeinfo.tubeCount}}</p>
 					</div>
 					<div v-if="!stakeinfo" style="text-align: center;width: 100%;line-height: 200px;">
 						暂无数据
@@ -106,23 +94,11 @@
 		
 		
 		<!-- 视频 -->
-		<el-dialog 
-		size="100%"
-		append-to-body
-		custom-class="tvdilog"
-		:withHeader="false"
-		:show-close="false"
-		:visible.sync="tv"
-		>
-			<i class="el-icon-circle-close" @click="tv=false" style="color: white;position: absolute;z-index: 9999;top: 5vh;right: 2vw;font-size: 30px;font-weight: bold;"></i>
-			 <video v-if="tv" id="uav_video" style="width: 100%;height: 100%;position: relative;" width="100%" height="100%" controls autoplay='true' ref="vide">
-				 <source id="videosSource" :src="tvurl" type="video/mp4">
-			 </video>
-		</el-dialog>
-		<!-- <el-drawer
+		<el-drawer
 		size="96%"
 		append-to-body
 		class="tvdilog"
+		:modal="false"
 		:withHeader="false"
 		:visible.sync="tv"
 		>
@@ -130,7 +106,7 @@
 		 <video v-if="tv" id="uav_video" style="width: 100%;height: 100%;position: relative;" width="100%" height="100%" controls autoplay='true' ref="vide">
 			 <source id="videosSource" :src="tvurl" type="video/mp4">
 		 </video>
-		</el-drawer> -->
+		</el-drawer>
 	</div>
 </template>
 
@@ -146,14 +122,9 @@
 		bridgedetailnew,
 		tvshow
 	} from "@/utils/bim.js"
-	import Progress from '@/components/bim/Progress'
+	import Progress from '@/components/bim/Pross'
 	export default {
 		name: 'depet',
-		filters:{
-			testTime(e){
-				return e.substring(0,e.length-8);
-			}
-		},
 		inject: ["reload"],
 		data() {
 			return {
@@ -193,14 +164,18 @@
 		},
 		mounted() {
 			// 视频是否显示
-			tvshow().then(res=>{
-				if(res.data.total == 0){
-					this.tvishave=false
-				}else{
-					this.tvishave=true
-					this.titlitv=res.data.items[0].title
-				}
-			})
+			// tvshow().then(res=>{
+			// 	if(res.data.total == 0){
+			// 		this.tvishave=false
+			// 	}else{
+			// 		this.tvishave=true
+			// 		this.titlitv=res.data.items[0].title
+			// 	}
+			// })
+			 let timestamp =new Date(new Date().setHours(0, 0, 0, 0)).getTime()
+			 this.$router.push({
+				 query:{time:timestamp}
+			 })
 			
 			this.$nextTick(() => {
 				firstbim().then(res=>{
@@ -208,8 +183,8 @@
 					var options = new BimfaceSDKLoaderConfig();
 					options.viewToken = res.data.viewToken;
 					this.viewToken=res.data.viewToken
-					// options.viewToken = "9d70c632e99a4c979e12bd66691861e0";
-					// this.viewToken="9d70c632e99a4c979e12bd66691861e0"
+					// options.viewToken ="968b796e14e042e0a5fde69782a2733d"
+					// this.viewToken="968b796e14e042e0a5fde69782a2733d"
 					initColor().then(data=>{
 						this.colorElements = data.data
 						BimfaceSDKLoader.load( options, that.successCallback,that.failureCallback)
@@ -218,78 +193,12 @@
 			})
 		},
 		methods: {
-
-			// succsCallback(viewMetaData) {
-			// 	var that = this
-			// 	let domShow = document.getElementById('domId');
-			// 	let webAppConfig = new Glodon.Bimface.Application.WebApplicationGISConfig();
-			// 	webAppConfig.domElement = domShow;
-			// 	let app = new Glodon.Bimface.Application.WebApplicationGIS(webAppConfig);
-			// 	app.addScene("075861dae94c495d97c0728becd05fee");
-			// 	let viewer = app.getViewer();
-				
-			// 	// 监听场景渲染完成
-			// 	viewer.addEventListener(Glodon.Bimface.Viewer.ViewerGISEvent.SceneAdded, function() {
-			// 		let layerMng = viewer.getLayerManager();
-					
-			// 		// 监听图层加载完成
-			// 		viewer.addEventListener(Glodon.Bimface.Viewer.ViewerGISEvent.LayerAdded, function(data) {
-			// 			console.log(data.getViewer())
-			// 			// 构件着色
-			// 			layerMng.getLayer('layer_10000802396865').getComponentManager().overrideColor({ids: that.colorElements.buildingEle.join().split(",")}, new Glodon.Web.Graphics.Color("#327d1c", 0.5));
-			// 			layerMng.getLayer('layer_10000802396865').getComponentManager().overrideColor({ids: that.colorElements.completeEle.join().split(",")}, new Glodon.Web.Graphics.Color("#f573cf", 0.5));
-			// 			that.model3D = viewer
-			// 			viewer.render();
-			// 			 // console.log(layerMng.'getLayer('layer_10000802396865').getPolygonComponentManager())
-			// 			// 点击监听
-			// 			viewer.addEventListener(Glodon.Bimface.Viewer.Viewer3DEvent.MouseClicked, that.getData);
-			// 		});
-					
-			// 		// viewer.addEventListener(Glodon.Bimface.Viewer.ViewerGISEvent.SelectedObjectsChanged, function(data) {
-			// 		// 	console.log(data)
-						
-			// 		// })
-			// 	})
-			// },
-
-
-
-
-
 			// 提交修改表单
 			onSubmit() {
 				updatadetail({
 					data: this.form,
 					id: this.dependid
 				}).then(res => {
-					// if (res.code == 200) {
-					// 	this.dialogVisible = false
-					// 	this.stakedilog = false
-					// 	this.dlirelode = !this.dlirelode
-					// 	if (this.form.status == 101002) {
-					// 		var color = "#f573cf"
-					// 		if (this.form.securityLevel == '1') {
-					// 			color = "#ffff00"
-					// 		} else if (this.form.securityLevel == '2') {
-					// 			color = "#FF8000"
-					// 		} else if (this.form.securityLevel == '3') {
-					// 			color = "#ff0000"
-					// 		}
-					// 		let building_color = new Glodon.Web.Graphics.Color(color, 0.5)
-					// 		this.model3D.getLayerManager().getLayer('layer_10000802396865').getComponentManager().overrideColor({ids: [this.dependid]}, building_color);
-					// 	} else if (this.form.status == 101003) {
-					// 		let building_color = new Glodon.Web.Graphics.Color("#327d1c", 0.5);
-					// 		this.model3D.getLayerManager().getLayer('layer_10000802396865').getComponentManager().overrideColor({ids: [this.dependid]}, building_color);
-					// 	} else { //移除颜色
-					// 		this.model3D.getLayerManager().getLayer('layer_10000802396865').getComponentManager().restoreColor({ids: [this.dependid]});
-					// 	}
-					// } else {
-					// 	this.$message.error('失败')
-					// }
-					
-					
-					
-					
 					if (res.code == 200) {
 						this.dialogVisible = false
 						this.stakedilog = false
@@ -314,8 +223,6 @@
 					} else {
 						this.$message.error('失败')
 					}
-					
-					
 				})
 			},
 
@@ -347,8 +254,7 @@
 						    })
 						let mapConfig = new Glodon.Bimface.Plugins.TileMap.MapConfig();
 						mapConfig.viewer = viewer3D;
-						
-						
+						// 设置模型载入的基点
 						// //上杭
 						// mapConfig.basePoint = {
 						// 	"x": 600000,
@@ -371,13 +277,15 @@
 						
 						
 						
+						
+						
 						let model3D = viewer3D.getModel()
 						let com_color = new Glodon.Web.Graphics.Color("#327d1c", 0.5);
 						model3D.overrideComponentsColorById(that.colorElements.completeEle, com_color);
 						let building_color = new Glodon.Web.Graphics.Color("#f573cf", 0.5);
 						model3D.overrideComponentsColorById(that.colorElements.buildingEle, building_color);
 						that.model3D = model3D
-						viewer3D.addEventListener(Glodon.Bimface.Viewer.Viewer3DEvent.MouseClicked, that.getData);
+						// viewer3D.addEventListener(Glodon.Bimface.Viewer.Viewer3DEvent.MouseClicked, that.getData);
 					});
 					// 渲染场景
 					viewer3D.render();
@@ -585,9 +493,6 @@
 						this.tvurl=res.data.items[0].url
 					}
 				})
-			},
-			godownlid(i){
-				window.open(i)
 			}
 		},
 	}
@@ -599,13 +504,13 @@
 		justify-content: center;
 		flex-direction: column;
 		align-items: center;
-		height: calc(100vh - 5.7292vw) !important;
-
+		height:100vh;
 	}
 
 	#domId {
 		flex: 1;
-		width: calc(100% - 30px);
+		/* width: calc(100% - 30px); */
+		 width:100%;
 		height: 100%;
 		position: absolute;
 		right: 0;
@@ -662,14 +567,13 @@
 		white-space: normal;
 		margin-left:0;
 		word-wrap: break-word;
-		
 	}
 
 	/deep/.el-drawer__open .el-drawer.ltr {
-		width: 600px !important;
-		height: 100%;
-		left: 52px;
-		top: 100px;
+		width: 80% !important;
+		height: 90%;
+		left: 40px;
+		top: 15px;
 		background-color: hsla(0, 0%, 100%, .8);
 		border-radius: 5px;
 	}
@@ -706,7 +610,6 @@
 
 	/deep/.el-dialog__body {
 		padding: 10px;
-		
 	}
 
 	.el-form {
@@ -750,9 +653,9 @@
 	.stakedilog {
 		position: absolute;
 		right: 0;
-		top: calc(100% + 12px);
+		top: calc(100% + 20px);
 		width: 100%;
-		height: auto;
+		height: 415px;
 		background-color: white;
 		border-radius: 4px;
 		padding: 15px;
@@ -779,28 +682,18 @@
 	}
 
 	.topdilog {
-		margin-top: 13vh;
-		width: 40%;
-		height: calc(100% - 10vh);
-		right: 2px !important;
+		margin-top: 15vh;
+		width: 88%;
+		height: 580px;
+		right: 42px !important;
 		left: auto !important;
 	}
 
 	/deep/.el-drawer__wrapper {
-		width: 670px !important;
-		height: 94%;
-	}
-	/deep/.tvdilog{
-		width: 97% !important;
+		width: 100% !important;
 		height: 100%;
-		position: absolute;
-		right: 0;
-		background: transparent;
 	}
-	/deep/.tvdilog .el-dialog__body{
-		height: 90%;
-	}
-	/deep/.el-form-item{
-		margin-bottom: 20px;
+	/deep/.rtl{
+		background-color:transparent !important;
 	}
 </style>

@@ -1,7 +1,6 @@
 <template>
 	<div class="progress">
 		<div class="serchbox">
-			<span>构件列表</span>
 			<el-input v-model="input" class="serinput">
 				 <el-select style="width: 70px;" v-model="select" slot="prepend" placeholder="构建类型">
 					  <el-option label="全部" value=""></el-option>
@@ -51,20 +50,29 @@
 			</li>
 			
 		</ul>
-		<div style="width: 97%;height: 90px;display: flex;
+		<div style="width: 97%;height: 90px;background-color: #ebebeb;display: flex;
 		justify-content: center;align-items: center;
 		">
 			<!-- 分页 -->
 			<el-pagination
-			style="width: 100%;"
+			  small
+			   v-if="total > 9"
+			   @current-change="whatepage"
+			   :current-page.sync="currentPage"
+			  layout="prev, pager, next"
+			  :total="total">
+			</el-pagination>
+			<!-- <el-pagination
+			style="width: 80%;"
 			  background
 			  v-if="total > 9"
 			  @current-change="whatepage"
 			  :current-page.sync="currentPage"
+			  :pager-count="6"
 			  layout="prev, pager, next, jumper"
 			  :page-size="9"
 			  :total="total">
-			</el-pagination>
+			</el-pagination> -->
 		</div>
 		
 	</div>
@@ -184,11 +192,11 @@
 <style scoped>
 	.serchbox{
 		display: flex;
-		width: auto;
+		width: 28%;
 		align-items: center;
 		height: 34px;
 		position: fixed;
-		top: 120px;
+		top: 30px;
 	}
 	.serchbox span{
 		font-size: 16px;
@@ -225,15 +233,17 @@
 	}
 	.serbtn{
 		color: #fff;
-		    background-color: #5bc0de;
-		    border-color: #46b8da;
-			padding: 9px 20px;
-			margin-left: 15px;
+		background-color: #5bc0de;
+		border-color: #46b8da;
+		padding: 9px 20px;
+		margin-left: 3px;
 	}
 	.progress{
-		padding:0 10px 10px 10px;
+		padding:0 2px;
 		box-sizing: border-box;
-		 
+	}
+	/deep/.el-drawer__header{
+		padding: 13px 7px 0;
 	}
 	.proul{
 		display: flex;
@@ -244,7 +254,7 @@
 		padding: 6px;
 	}
 	.proul li{
-		width:30%;
+		width:29%;
 		border-radius: 5px;
 		background: #ebebeb;
 		color: #2C58A6;

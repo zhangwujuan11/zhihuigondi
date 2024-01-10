@@ -50,18 +50,33 @@
 		      return {
 		        tableData: [],//table
 				danwei:true,
+				grandeid:''
 		      }
 		    },
 		mounted() {
-			// 列表
-			teams({
-				limit:20,
-				offset:1
-			}).then(res=>{
-				this.tableData=res.data.items
-			}).catch(()=>{
-				this.$message.error('请求错误')
-			})
+			if(this.$route.query.isback){
+				this.danwei=false
+				human({
+					id:this.$route.query.grandeid,
+					data:{
+						pageSize:20,
+						pageNum:1
+					}
+				}).then(res=>{
+					this.grandeid=this.$route.query.grandeid
+					this.tableData=res.data.items
+				})
+			}else{
+				this.danwei=true
+				teams({
+					pageSize:20,
+					pageNum:1
+				}).then(res=>{
+					this.tableData=res.data.items
+				}).catch(()=>{
+					this.$message.error('请求错误')
+				})
+			}
 		},
 		methods:{
 			openDetails (row) {
@@ -70,11 +85,12 @@
 					human({
 						id:row.deptId,
 						data:{
-							limit:20,
-							offset:1
+							pageSize:20,
+							pageNum:1
 						}
 					}).then(res=>{
 						this.danwei=false
+						this.grandeid=row.deptId
 						this.tableData=res.data.items
 					})
 				}else{
@@ -82,14 +98,16 @@
 						this.$router.push({
 							path:'/synthesize/team/workers',
 							query:{
-								parentid:row.deptId
+								parentid:row.deptId,
+								grandeid:this.grandeid
 								}
 						})
 					}else{
 						this.$router.push({
 							path:'/synthesize/team/wages',
 							query:{
-								parentid:row.deptId
+								parentid:row.deptId,
+								grandeid:this.grandeid
 								}
 						})
 					}
@@ -99,8 +117,8 @@
 			gorequest(){
 				this.danwei=true
 				teams({
-					limit:20,
-					offset:1
+					pageSize:20,
+					pageNum:1
 				}).then(res=>{
 					this.tableData=res.data.items
 				}).catch(()=>{
@@ -140,9 +158,10 @@
 	/*  */
 	.control{
 		display: flex;
-		justify-content: left;
-		height: 34px;
-		margin: 6px 0;
+		justify-content: end;
+		/* height: 34px; */
+		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;

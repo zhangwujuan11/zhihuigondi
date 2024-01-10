@@ -5,10 +5,11 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 //获取原型对象上的push函数
 const originalPush = VueRouter.prototype.push
-//修改原型对象中的push方法
 VueRouter.prototype.push = function push(location) {
 	return originalPush.call(this, location).catch(err => err)
 }
+
+
 
 const routes = [
   {// 首页
@@ -154,7 +155,17 @@ const routes = [
 			path: '/synthesize/experiment/rebar',
 			name: 'rebar',
 			component: () => import('@/views/synthesize/experiment/Rebar.vue')
-		}
+		},
+		{//综合管理-智慧张拉
+			path: '/synthesize/smart/index',
+			name: 'smart',
+			component: () => import('@/views/synthesize/smart/Index.vue')
+		},
+		{//综合管理-智能喷淋
+			path: '/synthesize/getspray/index',
+			name: 'getspray',
+			component: () => import('@/views/synthesize/getSpray/Index.vue'),
+		},
 	]
  },
  {
@@ -166,6 +177,18 @@ const routes = [
  			path: '',
  			name: 'bim',
  			component: () => import('@/views/bim/Index.vue'),
+ 		}
+ 	]
+ },
+ {
+ 	path: '/bim/wxindex',
+ 	component: {
+ 		render: (e) => e("router-view")
+ 	},
+ 	children: [{
+ 			path: '',
+ 			name: 'wxbim',
+ 			component: () => import('@/views/bim/wxindex.vue'),
  		}
  	]
  },

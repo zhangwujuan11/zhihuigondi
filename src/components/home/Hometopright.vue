@@ -11,7 +11,9 @@
 		<div class="bgbox-s"  @click="gogongzi">
 			<Titles>
 				<template v-slot:nametext>
-					{{mounthdata}}月农民工工资-(人)
+					{{nongmin.echartsValue |echartsValue}}
+					
+					月农民工工资-(人)
 				</template>
 			</Titles>
 			<div class="charttwo" ref="chartthree"></div>
@@ -19,7 +21,7 @@
 		<div class="bgbox-s" @click="gorectify">
 			<Titles>
 				<template v-slot:nametext>
-					{{mounthdata}}月安全检查-(次)
+					{{anquan.echartsValue |echartsValue}}月安全检查-(次)
 				</template>
 			</Titles>
 			<div class="charttwo" ref="chartfour"></div>
@@ -34,9 +36,17 @@
 		components:{
 			Titles
 		},
+		props:["methods"],
+		filters:{
+			echartsValue(e){
+				return e.substr(e.length-2,2)
+			}
+		},
 		data() {
 			return{
-				mounthdata:''//月份
+				mounthdata:'',//月份
+				nongmin:{},
+				anquan:{}
 			}
 		},
 		mounted() {
@@ -49,6 +59,13 @@
 				}
 				
 			})
+			// 
+			// 
+			
+			//
+			// 
+			//
+			// {statMonth:'202305'}
 			chaetthree().then(res=>{
 				if(res.code == 200){
 					this.echartsInit(res.data,this.$refs.chartthree)
@@ -84,7 +101,7 @@
 				var series = []
 				var index = 0;
 				for (var key in data.yaxisSeries) {
-				    var color = ["#23BBEE", "#FFB140"]
+				    var color = ["#23BBEE", "#FFB140",'#c00', '#b4a7d6',"#ffff00","#ea9999","#C6E2FF"]
 				    var dataItem = {
 				        data: data.yaxisSeries[key],
 				        type: 'bar',
@@ -127,25 +144,25 @@
 					        fontSize: '10px',
 					        interval: 0,
 					        rotate: "0",
-					        formatter: function (value)  //X轴的内容
-					        {
-					            var ret = ""; //拼接加\n返回的类目项
-					            var max = 8;  //每行显示的文字字数
-					            var val = value.length;  //X轴内容的文字字数
-					            var rowN = Math.ceil(val / max);  //需要换的行数
-					            if (rowN > 1)  //判断 如果字数大于2就换行
-					            {
-					                for (var i = 0; i < rowN; i++) {
-					                    var temp = "";  //每次截取的字符串
-					                    var start = i * max;  //开始截取的位置
-					                    var end = start + max;  //结束截取的位置
-					                    temp = value.substring(start, end) + "\n";
-					                    ret += temp;  //最终的字符串
-					                }
-					                return ret;
-					            }
-					            else { return value }
-					        },
+					        // formatter: function (value)  //X轴的内容
+					        // {
+					        //     var ret = ""; //拼接加\n返回的类目项
+					        //     var max = 8;  //每行显示的文字字数
+					        //     var val = value.length;  //X轴内容的文字字数
+					        //     var rowN = Math.ceil(val / max);  //需要换的行数
+					        //     if (rowN > 1)  //判断 如果字数大于2就换行
+					        //     {
+					        //         for (var i = 0; i < rowN; i++) {
+					        //             var temp = "";  //每次截取的字符串
+					        //             var start = i * max;  //开始截取的位置
+					        //             var end = start + max;  //结束截取的位置
+					        //             temp = value.substring(start, end) + "\n";
+					        //             ret += temp;  //最终的字符串
+					        //         }
+					        //         return ret;
+					        //     }
+					        //     else { return value }
+					        // },
 					    },
 					    axisLine: {
 					        lineStyle: {
@@ -158,7 +175,7 @@
 					    top: '7%',
 					    right: '1%',
 					    left: '1%',
-					    bottom: '5%',
+					    bottom: '3vw',
 					    right: '1%',
 					    left: '1%',
 					    containLabel: true,
@@ -210,16 +227,29 @@
 				this.$router.push('/safe/index')
 			}
 			
+		},
+		watch:{
+			methods(val){
+				val.map(item=>{
+					if(item.echartsKey == 10005){
+						this.nongmin=item
+					}else if(item.echartsKey == 10003){
+						this.anquan=item
+					}
+				})
+			}
 		}
 	}
 </script>
 
 <style scoped>
 	.charttwo{
-		height: 6.36875vw;
+		height:5.2vw;
 		min-height: 80px;    
 		margin-bottom: -30px;
-		margin-top: 10px;
+		margin-top: 3px;
 	}
-	
+	.bgbox-s{
+		margin-bottom:1.5vh;
+	}
 </style>

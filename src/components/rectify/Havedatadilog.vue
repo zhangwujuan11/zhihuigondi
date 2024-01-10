@@ -56,13 +56,19 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<p style="height: 80px;text-align: center;" ><el-button type="primary" @click="updatazicon(item.problemId)">修改内容</el-button></p>	
+					<!-- <p style="height: 80px;text-align: center;" ><el-button type="primary" @click="updatazicon(item.problemId)">修改内容</el-button></p>	 -->
 				</div>
+				<!-- <span class="addDomain" @click="addDomain()">+继续添加整改问题</span> -->
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="发起时间" prop="launchTime">
-							<el-date-picker v-model="ruleForm.launchTime" type="date" placeholder="选择日期" format="yyyy-MM-dd"
-								value-format="timestamp">
+							<el-date-picker 
+							v-model="ruleForm.launchTime" 
+							type="date" 
+							placeholder="选择日期" 
+							format="yyyy-MM-dd"
+							:picker-options="pickerOptions0"
+							value-format="timestamp">
 							</el-date-picker>
 						</el-form-item>
 						<el-form-item label="标段" prop="sectionId">
@@ -95,6 +101,7 @@
 							type="date" 
 							format="yyyy-MM-dd"
 							value-format="timestamp"
+							:picker-options="pickerOptions1"
 							placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
@@ -154,6 +161,23 @@
 		},
 		data() {
 			return {
+				// 日期
+				pickerOptions0: {
+					disabledDate: (time) => {
+						if (this.ruleForm.finishTime != "") {
+							return time.getTime() >=  new Date(this.ruleForm.finishTime).getTime();
+						}
+					}
+				},
+				 pickerOptions1: {
+					 
+					disabledDate: (time) => {
+						if (this.ruleForm.launchTime != ""){
+							return time.getTime() < new Date(this.ruleForm.launchTime).getTime();//减去一天的时间代表可以选择同一天;
+						}
+						
+					}
+				},
 				dangerlist: [{ //隐患点options
 					id: 22001,
 					name: "履约",
@@ -267,6 +291,8 @@
 				jobinfois: {},
 				bumenbox:false,
 				zerenbox:false,
+				indexid:'',
+				checkNum:1
 			}
 		},
 		mounted() {
@@ -280,16 +306,19 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						// console.log(this.ruleForm)
-						regiletoformal(this.ruleForm).then(res=>{
-							if(res.code == 200){
-								this.$message.success('发起整改成功')
-								this.reload()
-								this.$store.state.havedatadilog=false
-								
-							}else{
-								this.$message.error(res.message)
-							}
+						for(let i=0;i<this.ruleForm.rectifyProblemUpdates.length;i++){
+							this.updatazicon(this.ruleForm.rectifyProblemUpdates[i].problemId)
+						}
+						this.$nextTick(()=>{
+							regiletoformal(this.ruleForm).then(res=>{
+								if(res.code == 200){
+									this.$message.success('发起整改成功')
+									this.reload()
+									this.$store.state.havedatadilog=false
+								}else{
+									this.$message.error(res.message)
+								}
+							})
 						})
 					} else {
 						console.log('error submit!!');
@@ -301,15 +330,20 @@
 			savefrom(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						this.ruleForm.problems=this.ruleForm.rectifyProblemUpdates
-						savechange(this.ruleForm).then(res=>{
-							if(res.code == 200){
-								this.$message.success('保存成功')
-								this.reload()
-								this.$store.state.havedatadilog=false
-							}else{
-								this.$message.error(res.message)
-							}
+						for(let i=0;i<this.ruleForm.rectifyProblemUpdates.length;i++){
+							this.updatazicon(this.ruleForm.rectifyProblemUpdates[i].problemId)
+						}
+						this.$nextTick(()=>{
+							this.ruleForm.problems=this.ruleForm.rectifyProblemUpdates
+							savechange(this.ruleForm).then(res=>{
+								if(res.code == 200){
+									this.$message.success('保存成功')
+									this.reload()
+									this.$store.state.havedatadilog=false
+								}else{
+									this.$message.error(res.message)
+								}
+							})
 						})
 					} else {
 						console.log('error submit!!');
@@ -327,9 +361,7 @@
 					problemId:val,
 					data:arr1[0]
 				}).then(res=>{
-					if(res.code == 200){
-						this.$message.success("修改成功")
-					}else{
+					if(res.code != 200){
 						this.$message.warning(res.message)
 					}
 				})
@@ -343,12 +375,21 @@
 			},
 			// 增加内容
 			// addDomain() {
-			// 	this.ruleForm.rectifyProblemUpdates.push({
-			// 		value: '',
-			// 		key: Date.now()
-			// 	});
+			// 	this.checkNum += 1
+			// 	this.$set(this.ruleForm.rectifyProblemUpdates,this.ruleForm.rectifyProblemUpdates.length,{
+			// 		editType: 0,
+			// 		title: "整改内容" + this.checkNum,
+			// 		context: "",
+			// 		dataType: "",
+			// 		hidDanger: "",
+			// 		images: [],
+			// 		attachments: [],
+			// 		fileListImg: [],
+			// 		fileListPdf: [],
+			// 	})
+			// 	this.$forceUpdate();
+			// 	console.log(this.ruleForm.rectifyProblemUpdates)
 			// },
-
 
 			// uploade
 			handleImageAdd(index, res) {
@@ -485,11 +526,53 @@
 			// 关闭
 			close(){
 				this.$store.state.havedatadilog=false
-				this.reload()
+				reformeid(this.indexid).then(res=>{
+					this.ruleForm=res.data
+					this.ruleForm.rectifyProblemUpdates=res.data.problems
+					this.ruleForm.rectifyProblemUpdates.forEach(item => {
+						if (item.attachments) {
+							item.fileListPdf = item.attachments.map((items, indexs) => {
+								return {
+									name: `附件${indexs + 1}`,
+									url: items
+								}
+							})
+						} else {
+							item.fileListPdf = []
+							item.attachments = []
+						}
+						if (item.images) {
+							item.fileListImg = item.images.map((itemi) => {
+								return {
+									name: itemi,
+									url: itemi
+								}
+							})
+						} else {
+							item.fileListImg = []
+							item.images = []
+						}
+					})
+					if (res.data.copies) {
+						res.data.copiedType = res.data.copies
+					} else {
+						res.data.copiedType = [0]
+					}
+					this.zerenbox=true
+					this.processorList.nickName=this.ruleForm.processorNick
+					for (var i = 0; i < this.processorDeptList.length; i++) {
+						if (this.processorDeptList[i].sectionId == this.ruleForm.sectionId) {
+							this.jobinfo = this.processorDeptList[i].deptList
+							this.ruleForm.processorDeptId = res.data.processorDeptId
+							this.bumenbox=true
+						}
+					}
+				})
 			}
 		},
 		watch:{
 			havedatainfo(val){
+				this.indexid=val.rectifyId
 				// 待修改原始数据
 					reformeid(val.rectifyId).then(res=>{
 						this.ruleForm=res.data
@@ -589,5 +672,11 @@
 	}
 	/deep/.el-input__inner::-webkit-input-placeholder{ /*WebKit browsers*/
 	color: #ccc !important;
+	}
+	.addDomain{
+		display: block;
+		color: rgb(64, 128, 255);
+		margin: 10px 0;
+		cursor: pointer;
 	}
 </style>

@@ -42,3 +42,12 @@ export function VidoList(data){
 		method:'get'
 	})
 }
+
+// 监控状态
+export function statuscon(data){
+	return request({
+		url:'/front/v1/camera/status',
+		method:'get',
+		params:data
+	})
+}

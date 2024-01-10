@@ -14,15 +14,18 @@
 								<span>{{item.createTime | time}}</span>
 								<span type="primary" size="small" class="submi">{{item.statusDesc}}</span>
 							</p>
-							<img v-if="!item.cover" src="@/assets/image/rectify/moren.png" alt="">
+							<img v-if="!item.cover" src="@/assets/image/cams/uav_default.jpg" alt="">
 							<img v-if="item.cover" :src="item.cover" alt="">
 						</li>
 						<!-- 分页 -->
 						<el-pagination
+						style="width: 100%;"
 						  background
+						  v-if="total > 4"
 						  @current-change="whatepage"
 						  :current-page.sync="currentPage"
 						  layout="prev, pager, next, jumper"
+						  :page-size="4"
 						  :total="total">
 						</el-pagination>
 					</ul>
@@ -44,13 +47,13 @@
 							<div ref="chartfour"  style="height:17vw;width: 23vw;"></div>
 						</div>
 						
-						<div class="bgbox-m" style="margin-top:5vw">
+						<div class="bgbox-m" style="margin-top:6vw">
 							<Titles>
 								<template v-slot:nametext>
 									趋势分析
 								</template>
 							</Titles>
-							<div ref="chart"  style="height:200px;width: 50vw;"></div>
+							<div ref="chart"  style="height:200px;width: 47vw;"></div>
 						</div>
 					</div>
 				</el-tab-pane>
@@ -66,15 +69,18 @@
 								<span>{{item.createTime | time}}</span>
 								<span type="primary" size="small" class="submi">{{item.statusDesc}}</span>
 							</p>
-							<img v-if="!item.cover" src="@/assets/image/rectify/moren.png" alt="">
+							<img v-if="!item.cover" src="@/assets/image/cams/uav_default.jpg" alt="">
 							<img v-if="item.cover" :src="item.cover" alt="">
 						</li>
 						<!-- 分页 -->
 						<el-pagination
+						style="width: 100%;"
 						  background
+						  v-if="total > 4"
 						  @current-change="whatepage"
 						  :current-page.sync="currentPage"
 						  layout="prev, pager, next, jumper"
+						  :page-size="4"
 						  :total="total">
 						</el-pagination>
 					</ul>
@@ -85,7 +91,7 @@
 									类型分析
 								</template>
 							</Titles>
-							<div ref="echarttotop" style="height:15vw;width: 50vw;"></div>
+							<div ref="echarttotop" style="height:15vw;width: 45vw;"></div>
 						</div>
 						<div class="bgbox-m" style="margin-top:6vw;height:15vw;">
 							<Titles>
@@ -93,7 +99,7 @@
 									趋势分析
 								</template>
 							</Titles>
-							<div ref="echartto"  style="height:15vw;width: 50vw;"></div>
+							<div ref="echartto"  style="height:15vw;width: 47vw;"></div>
 						</div>
 					</div>
 				</el-tab-pane>
@@ -168,6 +174,7 @@
 				this.$store.state.safedilog=true
 			},
 			handleClick(event) {
+				console.log(this.total)
 				this.indx=event.index
 				userRelatedList({
 					limit:4,
@@ -202,7 +209,7 @@
 			whatepage(val){
 				userRelatedList({
 					limit:4,
-					offset:4 * val,
+					offset:4 * (val - 1),
 					dataType:Number(this.indx) + 1
 				}).then(res=>{
 					this.lidatas=res.data.items
@@ -251,7 +258,7 @@
 					        color: '#fff',
 					        fontSize: '10px',
 					        interval: 0,
-					        rotate: "0",
+					        rotate: "60",
 					        formatter: function (value)  //X轴的内容
 					        {
 					            var ret = ""; //拼接加\n返回的类目项
@@ -383,7 +390,6 @@
 						}
 					}]
 				});
-				
 				window.onresize = this.charts.resize;
 			},
 			
@@ -447,10 +453,12 @@
 	#pane-first{
 		display: flex;
 		justify-content: space-between;
+		width: 100vw;
 	}
 	#pane-second{
 		display: flex;
 		justify-content: space-between;
+		width: 100vw;
 	}
 	
 	.con{
@@ -465,6 +473,7 @@
 	     }
 	.con li{
 		width:48%;
+		height:38vh;
 		background: rgba(2, 82, 173, 0.3000);
 		border-radius: 10px;
 		padding: 20px 15px 15px 15px;
@@ -489,7 +498,7 @@
 	}
 	.con li img{
 		width: 100%;
-		height: 15vw;
+		height: 80%;
 		margin-top: 15px;
 	}
 	.con li .title{
@@ -518,16 +527,16 @@
 		align-content: flex-start;
 	}
 	.bgbox-s{
-		width: 49.5%;
+		width: 47.5%;
 	}
 	/deep/.titletext{
 		margin-top: -10px;
 	}
 	/deep/.titlel{
-		height: 10%;
+		height: 10% !important;
 	}
 	.bgbox-m{
-		width: 100%;
+		width: 94%;
 	}
 	/deep/.el-pagination{
 		margin-top: 0;

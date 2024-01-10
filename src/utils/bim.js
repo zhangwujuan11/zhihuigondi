@@ -62,3 +62,12 @@ export function bridgedetailnew(data){
 		method:'get'
 	})
 }
+
+// bim视频
+export function tvshow(){
+	return request({
+		url:'/v1/bimRender/list',
+		method:'get',
+		params:{title:''}
+	})
+}

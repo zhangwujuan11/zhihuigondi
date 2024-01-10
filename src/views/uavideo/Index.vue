@@ -94,6 +94,7 @@
 		width: 45%;
 		box-sizing: border-box;
 		margin-bottom: 15px;
+		cursor: pointer;
 	}
 	.video-item img{
 		width: 100%;

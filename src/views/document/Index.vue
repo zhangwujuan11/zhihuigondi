@@ -148,7 +148,7 @@
 		cursor: pointer;
 		box-sizing: border-box;
 		margin-bottom: 20px;
-		width: 210px;
+		width: 85%;
 		align-items: center;
 	}
 	.folder_name {

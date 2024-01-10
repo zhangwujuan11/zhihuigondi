@@ -1,441 +1,313 @@
 <template>
-	<div class="home">
-		<div class="home-top maincon">
-			<div class="hometopleft">
-				<div class="bgbox-s">
-					<Titles></Titles>
-					<div class="home-topfirst">
-						<div class="texttip">
-							已完成投资
-							<span class="numpet">¥{{investDone}} <span style="font-size: 14px;">万元</span></span>
-							总投资额
-							<span class="numsum">¥{{investSum}} <span style="font-size: 14px;">万元</span></span>
+	<div class="page-main" id="homeId">
+		<div class="row cams_content_row">
+			<div style="flex: 1;">
+				<div class="cams_content_row_left" id="hik_iframe">
+					<iframe ref='EZUIKitPlayer-video-container' id="EZUIKitPlayer-video-container" :src="open_url"
+						allowfullscreen="true" allow="autoplay" frameborder="0"
+						class="cams_content_row_left_video"></iframe>
+				</div>
+			</div>
+			<div style="width: 300px;">
+				<div class="row cams_content_row_right" style="margin-bottom:0px">
+					<div class="cams_content_row_right_1 default_div">
+						<input type="text" class="form-control" v-model="deviceSerial" id="deviceSerial"
+							style="display:none">
+						<div id="myTab" class="nav nav-tabs party-nav-tab" style="padding: 10px;">
+							<p class="active" id="tabItem1">视频监控</p>
+							<div class="row cam_list" style="overflow-x:hidden;">
+								<div class="camslistbox" v-for="(item,index) in list">
+									<div name="all_button" :id="'choose_'+item.id" style="cursor:pointer;height:auto;"
+										@click="queryCamList('1',index)">
+										<img style="height:80px;"
+											src="https://statics.ys7.com/device/assets/imgs/public/homeDevice.jpeg"
+											alt="" class="cams_cover">
+										<div v-if="item.status == 1" class="cams_online"></div>
+										<div v-else class="cams_offline"></div>
+										<h5 style="width:100%;overflow:hidden;color:#fff;padding:0;height: 20px;">
+											{{item.ayName}}</h5>
+									</div>
+								</div>
+							</div>
 						</div>
-						<div class="home-topfirstechart" ref="mabox"></div>
 					</div>
-				</div>
-				<div class="bgbox-s" @click="gorealtime">
-					<Titles>
-						<template v-slot:nametext>
-							项目简介
-						</template>
-					</Titles>
-					<div class="textcom">{{realtime}}</div>
-				</div>
-				<div class="bgbox-s" @click="gozixun">
-					<Titles>
-						<template v-slot:nametext>
-							资讯
-						</template>
-					</Titles>
-					<div class="gor">
-						<p 
-						v-for="(item,index) in gor"
-						:key="index"
+					<i class="namei" v-for="num in 3" :key="num"></i>
+					<div class="row cams_content_row_right_2" id="camsDirectionPanel"
+						:class="{'active':isActive,'error':!isActive}"
+						@mouseup="Device_PTZ(100)" @click="Device_PTZ(100)"
 						>
-						{{item.mfteTitle}}
-						</p>
+						<div class="container default_div" style="width:100%;height:100%">
+							<div class="row" style="width:100%;height:33.33%">
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_1"
+									@mousedown="Device_PTZ(4)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_2"
+									@mousedown="Device_PTZ(0)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_3"
+									@mousedown="Device_PTZ(6)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_add cams_content_row_right_2_arrow"
+									@mousedown="Device_PTZ(10)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_text">
+									<h5>变焦</h5>
+								</div>
+								<div class="cams_content_row_right_2_minu cams_content_row_right_2_arrow"
+									@mousedown="Device_PTZ(11)" @mouseup="Device_PTZ(100)"></div>
+							</div>
+							<div class="row" style="width:100%;height:33.33%">
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_4"
+									@mousedown="Device_PTZ(2)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_text" @mousedown="Device_PTZ(100)">
+									<h5>停止</h5>
+								</div>
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_5"
+									@mousedown="Device_PTZ(3)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_add" @mousedown="Device_PTZ(8)"></div>
+								<div class="cams_content_row_right_2_text">
+									<h5>变倍</h5>
+								</div>
+								<div class="cams_content_row_right_2_minu" @mousedown="Device_PTZ(9)"></div>
+							</div>
+							<div class="row" style="width:100%;height:33.33%">
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_6"
+									@mousedown="Device_PTZ(4)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_7"
+									@mousedown="Device_PTZ(1)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_8"
+									@mousedown="Device_PTZ(7)" @mouseup="Device_PTZ(100)"></div>
+								<div class="cams_content_row_right_2_list">
+									<select v-model="device_index" class="form-control" id="device_index">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+									</select>
+								</div>
+								<div class="cams_content_row_right_2_text" @click="device_preset()">
+									<h5>预置点</h5>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="hometopcenter" ref="hometopcenter" style="position: relative;">
-				 <img src="@/assets/image/home/road2.gif" class="road2" style="left: 19.8vw;top:18.3vw;">
-				 <img src="@/assets/image/home/road3.gif" class="road3" style="left: 2.734vw;top:19.398vw;">
-				 <img src="@/assets/image/home/rode44.gif" class="road" style="left:  24.2vw;top: 15.8vw;">
-				 <img src="@/assets/image/home/rode33.gif" class="road4" style="left:  43.5vw;top: 14.1vw;">
-				 <div
-				 v-for="(item,index) in porint"
-				 :key="index"
-				  @click="pointer(index)" 
-				  class="pointer" :style="item.style"
-				  :class="{pointer2: item.active}"
-				  ></div>
-				 <div id="video" class="video" v-if="videoshow">
-				     <div style="position: relative;">
-				         <img src="@/assets/image/home/del.png" class="del" @click="del()">
-				         <div class="cams_content_row_left" id="hik_iframe" style="width: 100%;height: 100%;">
-				             <iframe>
-							 </iframe>
-				         </div>
-				     </div>
-				 </div>
-				 
-			</div>
-			<div class="hometopright">
-				<Hometopright></Hometopright>
-			</div>
-		</div>
-		<div class="home-down maincon">
-		  <Homedown></Homedown>
 		</div>
 	</div>
 </template>
+
 <script>
-	import Titles from '@/components/slot/Titles.vue'
-	import Hometopright from '@/components/home/Hometopright.vue'
-	import Homedown from '@/components/home/Homedown.vue'
-	import {invest,homnescon,siteinfo,cams,camslist} from '@/utils/home'
+	import {cams,change_cam,camsgetlist,Device,statuscon} from '@/utils/cams'
+	import { Loading } from 'element-ui';
+	import '@/assets/cams/SCWS.cams.live.js'
+	import '@/assets/cams/SCWS.base.css'
+	import '@/assets/cams/SCWS.cams.live.css'
 	export default {
-		name: 'Home',
-		components: {
-			Titles,
-			Hometopright,
-			Homedown
-		},
+		name: '',
 		data() {
 			return {
-				investSum: null,
-				investDone: null,
-				doneRate: null,
-				realtime:'',
-				gor:[],
-				querydata:[],
-				porint:[
-					{style:'left: 48.308vw;top:12.356vw;',id:'3',code:'K01884075',active:false,factoryType:"hik"},
-					{style:"left: 45.448vw;top:13.708vw;",id:'6',code:'G70326272',active:false,factoryType:"hik"},
-					{style:'left: 43.552vw;top:14.748vw;',id:'4',code:'K01884065',active:false,factoryType:"hik"},
-					{style:'left: 42.432vw;top:16.1vw;',id:'8',code:'J98083734',active:false,factoryType:"hik"},
-					{style:'left: 41.232vw;top:16.1vw;',id:'22',code:'G70326258',active:false,factoryType:"hik"},
-					{style:'left: 40.132vw;top:16.1vw;',id:'23',code:'G70326389',active:false,factoryType:"hik"},
-					{style:'left: 39.132vw;top:16.1vw;',id:'24',code:'G70326396',active:false,factoryType:"hik"},
-					{style:'left: 38.012vw;top:16.212vw;',id:'20',code:'K41796990',active:false,factoryType:"hik"},
-					{style:'left: 36.504vw;top:17.824vw;',id:'21',code:'K41796988',active:false,factoryType:"hik"},
-					{style:'left: 33.228vw;top:16.688vw;',id:'5',code:'K01884048',active:false,factoryType:"hik"},
-					{style:'left: 29.588vw;top:15.284vw;',id:'1',code:'J98083569',active:false,factoryType:"hik"},
-					{style:'left: 27.976vw;top:14.812vw;',id:'9',code:'K01884080',active:false,factoryType:"hik"},
-					{style:'left: 26.52vw;top:15.024vw;',id:'2',code:'J98083731',active:false,factoryType:"hik"},
-					{style:'left: 23.504vw;top:16.844vw;',id:'7',code:'G70326379',active:true,factoryType:"hik"},
-				],
-				videoshow:false
+				isActive: true,
+				device_index: null,
+				deviceSerial: '',
+				open_url: '',
+				accessToken: '',
+				actionCarmarId: null,
+				CNO: '',
+				factoryType:'',
+				timer: null, // 定时器名称        
+				list:[]
 			}
 		},
 		mounted() {
-			// 投资饼图
-			invest().then(res => {
-				this.investSum = res.data.items[0].investSum / 10000 / 100;
-				this.investDone = res.data.items[0].investDone / 10000 / 100;
-				this.doneRate = res.data.items[0].doneRate
-				this.$refs.hometopcenter.style.backgroundImage='url('+res.data.items[0].homeImg+')'
-				this.echartsInit()
+			this.$nextTick(()=>{
+				this.queryCamList('1', 0)
 			})
-			// 项目介绍
-			homnescon().then(res=>{
-				this.realtime=res.data.items[0].content.replace(/<[^>]+>/g,"")
-				this.querydata=res.data.items
-			})
-			// 资讯
-			siteinfo().then(res=>{
-				this.gor=res.items
-			})
+			
+			// 监听页面是否操作
+			var count = 0;
+			var outTime = 5; //分钟
+			this.timer = window.setInterval(() => {
+				count++;
+				if (count == outTime * 60) {
+					document.getElementById('homeId').remove();
+					alert("长时间未操作页面，已为您停播，请重新加载");
+					location.reload();
+				}
+			}, 1000)
+			var x;
+			var y;
+			//监听鼠标
+			document.getElementById('homeId').onmousemove = function(event) {
+				var x1 = event.clientX;
+				var y1 = event.clientY;
+				if (x != x1 || y != y1) {
+					count = 0;
+				}
+				x = x1;
+				y = y1;
+			};
+			//监听键盘
+			document.getElementById('homeId').onkeydown = function() {
+				count = 0;
+			};
+		},
+		beforeDestroy() {
+			clearInterval(this.timer);
+			this.timer = null;
 		},
 		methods: {
-			pointer(e){
-				for(let i =0;i<this.porint.length;i++){
-					if(e == i){
-						this.porint[i].active=true
-					}else{
-						this.porint[i].active=false
-					}
+			//加载
+			starVideotLoading() {
+				var that = this
+				that.videoLoading = this.$loading({
+					lock: true, //是否锁定
+					text: "拼命加载中...", //显示在加载图标下方的加载文案
+					spinner: 'el-icon-loading',
+					target: document.querySelector('.video_loading'), //设置加载动画区域  添加了target属性就可以设置局部区域，不添加就默认全局区域
+					background: 'rgba(0,0,0,.5)', //遮罩背景色
+				});
+			},
+			endVideoLoading() {
+				var that = this
+				that.videoLoading.close();
+			},
+			//
+			device_preset() {
+				let obj = {
+					index: this.device_index,
+					deviceSerial: this.actionCarmarId
 				}
-				cams({
-					cameraType:this.porint[e].factoryType, 
-					id:this.porint[e].code, //设备编码
-					cno:this.porint[e].id,//监控信道id
-					}).then(data=>{
-						if(data.code == 200){
-							this.videoshow=true
-								this.$nextTick(()=>{
-								document.getElementById("hik_iframe").innerHTML =
-									'<iframe src="https://open.ys7.com/ezopen/h5/iframe_se?url=' + data.data.openUrl +
-									'&autoplay=1&templete=simple&id=video-container&accessToken=' + data.data.accessToken +
-									'"  id="EZUIKitPlayer-video-container" allowfullscreen="true" allow="autoplay" frameborder="0" class="cams_content_row_left_video" style="height:17.5vw; position: relative;top: -2.8vw"></iframe>';
-							})
-						}else{
-							this.$message.error("设备离线")
-							this.videoshow=false
-						}
-						
-				}).catch(()=>{
-					this.$message.error("请求错误！")
+				camsgetlist(JSON.stringify(obj)).then(res => {
+					let LoginSuccess = res.success
+					if (LoginMessages != '1') {
+						this.$message.error(res.Return_Message);
+					} else {}
 				})
 			},
-			//初始化echarts
-			echartsInit() {
-				let linearBar = this.$echarts.getInstanceByDom(this.$refs.mabox); //有的话就获取已有echarts实例的DOM节点。
-				if (linearBar == null) { // 如果不存在，就进行初始化。
-					linearBar = this.$echarts.init(this.$refs.mabox, null, {devicePixelRatio: 2.5});
-				}
-				linearBar.setOption({
-					tooltip: {
-						trigger: 'item'
-					},
-					color:["#EE2323",'rgb(47,69,84)'],
-					series: [{
-						name: '',
-						type: 'pie',
-						radius: ['40%', '60%'],
-						avoidLabelOverlap: false,
-						itemStyle: {
-							borderRadius: 0,
-							borderColor: '#fff',
-							borderWidth: 0
-						},
-						label: {
-							show: false,
-							position: 'center',
-								show: true,
-								position: 'center',
-								color: '#4c4a4a',
-								formatter: '{total|' + this.doneRate + '%' +'}'+ '\n\r' + '{active|完成比例}',
-								 rich: {
-										total:{
-											fontSize: 12,
-											fontFamily : "微软雅黑",
-											color:'#ffffff',
-											 lineHeight:24,
-										},
-										active: {
-											fontFamily : "微软雅黑",
-											fontSize: 12,
-											color:'rgb(170, 170, 170)',
-										}
+			show() {
+				this.isActive = false
+				let player = document.getElementById('EZUIKitPlayer-video-container')
+				player.contentWindow.postMessage("closeSound", this.open_url) /* 关闭声音 */
+			},
+			queryCamList(type, index) {
+				this.starVideotLoading()
+				cams(type).then(data => {
+					if(data.items){
+						this.list = data.items
+						this.factoryType=data.items[index].factoryType,
+						this.actionCarmarId=data.items[index].aySerNo
+						if (type == '1' && data.total > 0) {
+							change_cam({
+								id:data.items[index].aySerNo,
+								cameraType:data.items[index].factoryType,
+								cno: data.items[index].cno
+							}).then(res => {
+								this.CNO=data.items[index].cno
+								this.endVideoLoading() 
+								if (res.code != 200) {
+									 this.$message.error(res.data.detail)
+								}else{
+									let open_url = res.data.openUrl;
+									if(open_url){
+									  var urlList = open_url.split('/')
+									  urlList[urlList.length-1] = data.items[index].cno+'.hd.live'
+									 this.open_url = urlList.join('/')
 									}
-						},
-						emphasis: {
-							label: {
-								show: true,
-							}
-						},
-						labelLine: {
-							show: false
-						},
-						data: [{
-								value: this.doneRate,
-								name: '已完成'
-							},
-							{
-								value: 100 - this.doneRate,
-								name: '未完成'
-							},
-						],
-					}]
+									
+									document.getElementById("hik_iframe").innerHTML =
+										'<iframe src="https://open.ys7.com/ezopen/h5/iframe_se?url=' +  this.open_url + '&autoplay=1&templete=0&id=video-container&accessToken=' + res
+										.data.accessToken +
+										'"  id="EZUIKitPlayer-video-container" allowfullscreen="true" allow="autoplay" frameborder="0" class="cams_content_row_left_video"></iframe>';
+									this.accessToken = res.data.accessToken;
+								}
+							})
+							this.isonline()
+						}
+					}else{
+						this.endVideoLoading() 
+						this.$message.warning('无监控')
+					}
 				})
-				window.onresize = linearBar.resize;
 			},
-			// 项目简介
-			gorealtime(){
-				this.$router.push('/home/projectduction')
-			},
-			// 资讯
-			gozixun(){
-				this.$router.push('/news/index')
-			},
-			// 关闭监控
-			del(){
-				this.videoshow=false
-			}
 			
-		}
+			// // 状态
+			isonline(){
+				for(let i=0;i<this.list.length;i++){
+					statuscon({
+						cameraType:this.list[i].factoryType,
+						cno:this.list[i].cno,
+						driver:this.list[i].aySerNo,
+					}).then(pon=>{
+						this.list[i].status=pon.data.status
+					})
+				}
+			},
+			
+			
+			Device_PTZ(direction) {
+				Device({
+					id: this.actionCarmarId,
+					direction: direction,
+					cno: this.CNO,
+					cameraType:this.factoryType
+				}).then(res => {
+					if(res.code!==200){
+					  	console.log(res.data.detail);
+					}
+				})
+			}
+		},
 	}
 </script>
+
 <style scoped>
-	.home {
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
-		align-items: center;
+	.error {
+		display: block;
 	}
-	.bgbox-s {
-		width: 18.75vw;
+
+	#tabItem1 {
+		background: linear-gradient(180deg, rgba(3, 87, 176, 0) 0%, rgba(61, 159, 207, 0.7) 100%);
+		border-radius: 4px;
+		border: 1px solid #52CCFF;
+		cursor: pointer;
+		color: white;
+		padding: 5px 8px;
+		box-sizing: border-box;
+		width: 100px;
+		text-align: center;
 	}
-	.home-top{
+
+	.cam_list {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 	}
-	.home-topfirst {
-		padding: 8px 1.04167vw;
-		margin-bottom: -3.5vw;
-		position: relative;
-		width: 100%;
-		height: 8vw;
+
+	.namei{
+		width: 45%;
 	}
-	.texttip {
-		line-height: 1.23vw;
-		height: 0.83333vw;
-		/* margin-bottom: 0.625vw; */
-		font-size: 12px;
-		color: white;
-		width: 100%;
+
+	.cam_list .camslistbox {
+		width: 45%;
+		padding: 0;
+		margin: 10px 0;
 	}
-	.numpet {
-		font-size: 1.25vw;
-		font-weight: 700;
-		color: rgb(255, 202, 24);
-		line-height: 1.23vw;
-		display: block;
-		margin:0.4vw 0;
-	}
-	.numsum {
-		font-weight: 700;
-		font-size: 1.25vw;
-		color: rgb(84, 246, 255);
-		line-height: 1.23vw;
-		display: block;
-		margin:0.4vw 0;
-	}
-	.hometopcenter{
-		width: 57.2917vw;
-		height: 31.1vw;
-		background-size: 100% 100%;
-	}
-	.hometopleft{
-		width: 18.75vw;
-		flex-direction: column;
-	}
-	.textcom{
-		padding: 1vw;
-		box-sizing: border-box;
-		font-size: 0.7292vw;
-		line-height: 1.1353vw;
-		color: rgb(0, 207, 255);
-		height: 6.4vw;
-		overflow-y: hidden;
-		white-space: normal;
-		text-overflow: ellipsis;
-		cursor: pointer;
-		display: -webkit-box;
-	  -webkit-line-clamp: 5;
-	  -webkit-box-orient: vertical;
-	  margin-bottom: -25px;
-	  padding-top: 10px;
-	}
-	.gor{
-		padding: 10px  1.04167vw 0 1.04167vw;
-		margin-bottom: -15px;
-		height: 5vw;
-		overflow: hidden;
-	}
-	.gor p{
-		font-size: 0.7292vw;
-		line-height: 1.6vw;
-		color: rgb(0, 207, 255);
-		border-bottom: 1px dashed rgb(53, 99, 161);
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-	.hometopright{
-		width: 18.75vw;
-		height: 31vw;
+	.cams_content_row .cams_content_row_right_1{
 		overflow-y: scroll;
+		overflow: -moz-scrollbars-none;
 	}
-	.hometopright::-webkit-scrollbar {
-	    display: none; /* Chrome Safari */
-	}
-	.home-topfirstechart{
-		width: 8vw;
-		height: 8vw;
-		position: absolute;
-		right: 3vw;
-		top: -1vw;
-	}
-	
-	
-	.road2{
-	    width: 4.7vw;
-		height: 6vw;
-	    position: absolute;
-	    left: 20vw;
-	    top: 17.8vw;
-		-webkit-transform: rotate(-1deg);
-		transform:rotate(-1deg);
-	}
-	.road3{
-		-webkit-transform: rotate(4deg);
-		transform:rotate(4deg);
-	    width: 8.81666666vw;
-	    position: absolute;
-	    left: 2.7vw;
-	    top: 19.48vw
-	}
-	.road4{
-		width: 5.5vw;
-		position: absolute;
-		-webkit-transform: rotate(4deg);
-		transform:rotate(4deg);
-	}
-	.road{
-	    width: 19vw;
-	    position: absolute;
-	    left: 24vw;
-	    top: 13.2vw;
-	}
-	.pointer{
-	    position: absolute;
-	    width:1.472vw;
-	    height:2.2vw;;
-	    background: url("~@/assets/image/home/point.png") no-repeat;
-	    background-size: 1.472vw;
-	    cursor: pointer;
-	    
-	}
-	.pointer::after{
-	    content: '';
-	    width: 2vw;
-	    height: 2vw;
-	    display: block;
-	    background: url("~@/assets/image/home/point-bg.png") no-repeat;
-	    background-size: 2vw auto;
-	    position: relative;
-	    left: -0.25vw;
-	    top: 0.5vw;
-	}
-	.pointer2{
-	    position: absolute;
-	    width:1.872vw;
-	    height:2.2vw;;
-	    background: url("~@/assets/image/home/point1.png") no-repeat;
-	    background-size: 1.472vw;
-	    cursor: pointer;
-	    
-	}
-	.pointer2::after{
-	    content: '';
-	    width: 2vw;
-	    height: 2vw;
-	    display: block;
-	    background: url("~@/assets/image/home/point-bg2.png") no-repeat; 
-	    background-size: 2vw auto;
-	    left: -0.25vw;
-	    top: 0.5vw;
-	}
-	.cams_content_row_left_video{
-	    width:100%;
-	    height:100%;
-	    padding:5px;
-	}
-	.del{
-	    position: absolute;
-	    right: 0vw;
-	    top:0vw;
-	    width: 1.2vw;
-	    height: 1.2vw;;
-	    z-index: 9999;
-	}
-	.video{
-	    width: 18.408vw;
-	    height: 12.272vw;
-	    position: absolute;
-	    left:1vw;
-	    top: 1vw;
-	    border: 0.1vw solid #52CCFF;
-	    background: #999;
-	    overflow: hidden;
-	}
-	.video iframe{
-	    width: 100%;
-	    height: 14vw !important;
-	    position: relative;
-	    top: -30vw;
-	}
+	.cams_content_row .cams_content_row_right_1::-webkit-scrollbar { width: 0!important }
 </style>

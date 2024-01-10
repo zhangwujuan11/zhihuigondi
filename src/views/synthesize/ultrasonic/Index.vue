@@ -27,10 +27,10 @@
 						  type="index"
 						  label="序号">
 						</el-table-column>
-				       <el-table-column
+				      <!-- <el-table-column
 				         prop="machineId"
 				         label="设备编号">
-				       </el-table-column>
+				       </el-table-column> -->
 					   <el-table-column
 					   prop="pileNo"
 					   label="桩号">
@@ -45,13 +45,14 @@
 					   </el-table-column>
 					   <el-table-column
 					     prop="concreteStrength"
-					     label="混凝土强度">
+						 width="180"
+					     label="桩顶初测点标高(m)">
 					   </el-table-column>
-					   <el-table-column
+					   <!-- <el-table-column
 					     prop="sectionCount"
-					     label="检测的剖面数量">
-					   </el-table-column>
-					   <el-table-column
+					     label="类型">
+					   </el-table-column> -->
+					 <!--  <el-table-column
 					     prop="step"
 					     label="测点间距">
 					   </el-table-column>
@@ -72,17 +73,36 @@
 					   <el-table-column
 					     prop="gpsLongitude"
 					     label="GPS经度">
+					   </el-table-column> -->
+					   <el-table-column
+					    width="200"
+					     prop="serialNo"
+					     label="检测结果（类型/判定）">
+						 <template slot-scope="scope">
+						 	{{scope.row.machineId}}/{{scope.row.serialNo}}
+						 </template>
 					   </el-table-column>
 					   <el-table-column
 					     width="200"
 					     prop="testTime"
-					     label="测试时间">
+					     label="检测时间">
+						 <template slot-scope="scope">
+						 	{{scope.row.testTime | testTime}}
+						 </template>
 					   </el-table-column>
 					   <el-table-column
+					     width="200"
+					     prop="dataFile"
+					     label="报告">
+						 <template slot-scope="scope"> 
+							<sapn @click="godownlid(scope.row.dataFile)" style="color: skyblue;">查看</sapn>
+						 </template>
+					   </el-table-column>
+					   <!-- <el-table-column
 					    width="200"
 					     prop="createDate"
 					     label="创建时间">
-					   </el-table-column>
+					   </el-table-column> -->
 				     </el-table>
 					 <el-pagination background @current-change="handleCurrentChange" :current-page="currentPage"
 						:page-sizes="pageSizes" :page-size="PageSize" layout="prev, pager, next, jumper" :total="totalCount">
@@ -104,7 +124,10 @@
 					return '有GPS'
 				}else{
 					return "无GPS"
-			}}
+			}},
+			testTime(e){
+				return e.substring(0,e.length-8);
+			}
 		},
 		inject:["reload"],
 		components:{
@@ -169,6 +192,9 @@
 				}).catch(()=>{
 					this.$message.error('请求错误')
 				})
+			},
+			godownlid(i){
+				window.open(i)
 			}
 		}
 	}
@@ -202,8 +228,9 @@
 	.control{
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;

@@ -87,9 +87,10 @@
 	/*  */
 	.control{
 		display: flex;
-		justify-content: left;
-		height: 34px;
-		margin: 6px 0;
+		justify-content: end;
+		/* height: 34px; */
+		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;

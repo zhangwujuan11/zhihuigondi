@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			<div class="swiper">
-				<el-carousel :interval="3000" trigger="click" arrow="always" height="290px" :autoplay="true">
+				<el-carousel :interval="3000" trigger="click" arrow="always" height="290px" :autoplay="true" style="cursor: pointer;">
 					<el-carousel-item v-for="item in swipelist" :key="item.id" >
 						<img :src="item.mfteCover" style="width: 100%;height: 100%;" @click="swipers(item.id)">
 						<h3  @click="swipers(item.id)" class="swiperh3">{{ item.mfteTitle }}</h3>
@@ -84,7 +84,7 @@
 
 <script>
 	import Titlem from '@/components/slot/Titlem.vue'
-	import {partbulidask, dangjain} from '@/utils/home.js'
+	import {partbulidask, dangjain, partyecharts} from '@/utils/home.js'
 	export default {
 		name:'tryu',
 		components: {
@@ -114,6 +114,25 @@
 					// console.log(res.items)
 				}
 			})
+			
+			// echarts
+			let ydata=[]
+			partyecharts().then(res=>{
+				let obj={
+					name: '',
+					value: null,
+				}
+				for (let key in res.data.data) {
+				   obj={
+					name: key,
+					value: res.data.data[key],
+				   }
+				 ydata.push(obj)  
+				}
+				this.echartsInit(ydata)
+			})
+			
+			
 		},
 		methods: {
 			// 切换tab
@@ -135,7 +154,47 @@
 					path:'/home/partydetails',
 					query:{id:JSON.stringify(i)}
 				})
-			}
+			},
+			//初始化echarts
+			echartsInit(datas) {
+				let linearBar = this.$echarts.getInstanceByDom(this.$refs.chartone); //有的话就获取已有echarts实例的DOM节点。
+				if (linearBar == null) { // 如果不存在，就进行初始化。
+					linearBar = this.$echarts.init(this.$refs.chartone, null, {devicePixelRatio: 2.5});
+				}
+				linearBar.setOption({
+					tooltip: {
+						trigger: 'item'
+					},
+					labelLine: {
+						  show: false
+						},
+					color:["#EE2323",'rgb(47,69,84)'],
+					series: [{
+						type: 'pie',
+						  radius: '85%',
+						avoidLabelOverlap: false,
+						itemStyle: {
+							borderRadius: 0,
+							borderColor: '#fff',
+							borderWidth: 0
+						},
+						label: {
+						        position: 'inner',
+						        fontSize: 14
+						      },
+						emphasis: {
+							label: {
+								show: true,
+							}
+						},
+						labelLine: {
+							show: false
+						},
+						data: datas,
+					}]
+				})
+				window.onresize = linearBar.resize;
+			},
 		}
 	}
 </script>

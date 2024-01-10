@@ -19,7 +19,7 @@
 				       :value="item.value">
 				     </el-option>
 				   </el-select>
-				  <el-input v-model="input" class="serinput"></el-input>
+				  <el-input v-model="input" class="serinput" @keyup.enter.native="changestatus()"></el-input>
 				  <el-button type="primary" size="small" class="submi" @click="changestatus()">搜索</el-button>
 			</div>
 			
@@ -34,17 +34,17 @@
 						<span>{{item.createTime | conversion}}</span>
 						<span type="primary" size="small" class="submi">{{item.statusDesc}}</span>
 					</p>
-					<img v-if="!item.cover" src="@/assets/image/rectify/moren.png" alt="">
+					<img v-if="!item.cover" src="@/assets/image/cams/uav_default.jpg" alt="">
 					<img v-if="item.cover" :src="item.cover" alt="">
 				</li>
 			</ul>
-			
 			<!-- 分页 -->
 			<el-pagination
 			  background
 			  @current-change="whatepage"
 			  :current-page.sync="currentPage"
 			  layout="prev, pager, next, jumper"
+			  :page-size="PageSize"
 			  :total="total">
 			</el-pagination>
 		</div>
@@ -106,18 +106,15 @@
 				total:0,//页面数据总数
 				currentPage:1,
 				lidatas:[],//页面数据
-				havedatainfo:null//单条数据id
+				havedatainfo:null,//单条数据id
+				PageSize:8
 			}
 		},
 		mounted() {
 			this.identityCode = localStorage.getItem("identityCode")
 			// console.log(this.identityCode)
 			// 我的待办列表出现啦
-			this.getdatas({
-				page:1,
-				status:0,
-				keyword:'',
-			})
+			this.changestatus()
 		},
 		methods:{
 			// 我的待办

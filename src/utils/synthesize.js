@@ -69,9 +69,25 @@ export function human(data){
 // 农名工管理
 export function workerName (data) {
 	return request({
-		url:'/v1/human/buildingUnits/223/workers',
+		url:'/v1/human/workers/'+data.deptId+'/serach',
 		method:'get',
 		params:data
+	})
+}
+
+// 农名工管理-详情-劳务队伍
+export function buildingUnits (data) {
+	return request({
+		url:'/v1/human/buildingUnits/' + data,
+		method:'get',
+	})
+}
+// 农名工管理修改
+export function Unitsopdata (data) {
+	return request({
+		url:'/v1/human/workers/' + data.workerId,
+		method:'PUT',
+		data:data
 	})
 }
 
@@ -499,3 +515,61 @@ export function subconcretet(data){
 	})
 }
 
+
+// 智慧张拉列表
+export function smartlist(data){
+	return request({
+		url:'/v1/tensile/actions/search',
+		method:'get',
+		params:data
+	})
+}
+// 智慧张拉搜索指定id
+export function serchsamrtid(data){
+	return request({
+		url:'/v1/tensile/' + data,
+		method:'get'
+	})
+}
+// 修改智慧张拉
+export function smartupdate(data){
+	return request({
+		url:'/v1/tensile/actions/' + data.id,
+		method:'put',
+		data:data
+	})
+}
+// 新增智慧张拉列表
+export function addsmartlist (data){
+	return request({
+		url:'/v1/tensile',
+		method:'POST',
+		data:data
+	})
+}
+// 删除智慧张拉数据
+export function detelsmart(data){
+	return request({
+		url:'/v1/tensile/' + data,
+		method:'DELETE'
+	})
+}
+
+//导出智慧张拉数据
+export function exportsmart(data){
+	return request({
+		url:'/v1/tensile/actions/export',
+		method:'get',
+		params:data,
+		responseType:'blob'
+	})
+}
+
+// 智能喷淋
+export function getspray(data){
+	return request({
+		url:'/v1/spray/actions/search',
+		method:'get',
+		params:data
+	})
+}

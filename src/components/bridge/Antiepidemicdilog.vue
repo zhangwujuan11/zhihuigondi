@@ -9,6 +9,8 @@
 	   stripe
 	   :header-cell-style="{border:'1px'}"
 	   style="width: 100%">
+	   <el-table-column type="index"></el-table-column>
+
 		 <el-table-column
 		   prop="name"
 		   label="姓名">
@@ -23,14 +25,14 @@
 		   prop="cardNo"
 		   label="身份证号">
 		 </el-table-column> 
-		 <el-table-column
+		 <!-- <el-table-column
 		   prop="temperatureStatus"
 		   label="体温状态">
 		   <template slot-scope="scope">
 			   {{scope.row.temperatureStatus | temperatureStatus}}
 		   </template>
-		 </el-table-column> 
-		 <el-table-column
+		 </el-table-column> -->
+		<!-- <el-table-column
 		   prop="temperature"
 		   label="体温">
 		 </el-table-column> 
@@ -47,7 +49,7 @@
 		   <template slot-scope="scope">
 			   {{scope.row.levelStatus | levelStatus}}
 		   </template>
-		 </el-table-column> 
+		 </el-table-column> -->
 		 <el-table-column
 		   prop="scanTime"
 		   label="考勤日期">
@@ -91,6 +93,7 @@
 <script>
 	import {antiepidemicdetail} from '@/utils/synthesize'
 	export default{
+		inject:["reload"],
 		filters:{
 			temperatureStatus(e){
 				if(e == "0"){
@@ -180,14 +183,14 @@
 		},
 		watch:{
 			dilogodata(val){
-				this.compay=val
-				if(val != ''){
+				this.compay=val.type
+				if(val.type != ''){
 					antiepidemicdetail({
 						pageSize:10,
 						pageNum:1,
 						starTime:this.start,
 						endTime:this.end,
-						company:val
+						company:val.type
 					}).then(res=>{
 						this.tabledilog=res.items
 						this.totalCount=res.total

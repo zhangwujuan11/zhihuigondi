@@ -34,7 +34,7 @@
 								</div>
 							</template>
 						</el-table-column>
-						<el-table-column width="90" prop="sampleNo" label="报告编号">
+						<el-table-column width="150" prop="sampleNo" label="报告编号">
 						</el-table-column>
 						<el-table-column width="280" prop="position" label="工程部位">
 						</el-table-column>
@@ -42,7 +42,7 @@
 						</el-table-column>
 						<el-table-column width="100" prop="diameters" label="直径">
 						</el-table-column>
-						<el-table-column width="100" prop="factory" label="生产产家	">
+						<el-table-column width="150" prop="factory" label="生产产家	">
 						</el-table-column>
 						<el-table-column prop="batchNo" label="批号">
 						</el-table-column>
@@ -52,8 +52,8 @@
 						</el-table-column>
 						<el-table-column width="300" prop="supervision" label="监理单位">
 						</el-table-column>
-						<el-table-column prop="remark" label="备注">
-						</el-table-column>
+						<!-- <el-table-column prop="remark" label="备注">
+						</el-table-column> -->
 					</el-table>
 					<el-pagination background @current-change="handleCurrentChange" :current-page="currentPage"
 						:page-sizes="pageSizes" :page-size="PageSize" layout="prev, pager, next, jumper" :total="totalCount">
@@ -66,14 +66,13 @@
 		<el-dialog title="新增钢筋抗压试验数据" :visible.sync="wokerdilog" width="80%">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
 				<el-form-item label="施工单位" prop="construction">
-					<el-select v-model="ruleForm.construction" placeholder="请选择施工单位" style="width: 80%;"
-						@change="cahngeshigong">
+					<el-select v-model="ruleForm.construction" placeholder="请选择施工单位" style="width: 80%;">
 						<el-option v-for="(item,index) in optiont" :label="item.deptName"
 							:value="item.deptName"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="监理单位" prop="supervision">
-					<el-select v-model="ruleForm.supervision" placeholder="请选择监理单位" style="width: 80%;" @change="cahngejianli">
+					<el-select v-model="ruleForm.supervision" placeholder="请选择监理单位" style="width: 80%;">
 						<el-option v-for="(item,index) in optiono" :label="item.deptName"
 							:value="item.deptName"></el-option>
 					</el-select>
@@ -122,7 +121,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="监理单位" prop="supervision">
-					<el-select v-model="ruleForm.supervision" placeholder="请选择监理单位" style="width: 80%;" @change="cahngejianli">
+					<el-select v-model="ruleForm.supervision" placeholder="请选择监理单位" style="width: 80%;">
 						<el-option v-for="(item,index) in optiono" :label="item.deptName"
 							:value="item.deptName"></el-option>
 					</el-select>
@@ -212,11 +211,11 @@
 						message: '请输入',
 						trigger: 'blur'
 					}],
-					construction: [{
-						required: true,
-						message: '请输入',
-						trigger: 'blur'
-					}],
+					// construction: [{
+					// 	required: true,
+					// 	message: '请输入',
+					// 	trigger: 'blur'
+					// }],
 					diameters: [{
 						required: true,
 						message: '请输入',
@@ -237,11 +236,11 @@
 						message: '请输入',
 						trigger: 'blur'
 					}],
-					supervision: [{
-						required: true,
-						message: '请输入',
-						trigger: 'blur'
-					}],
+					// supervision: [{
+					// 	required: true,
+					// 	message: '请输入',
+					// 	trigger: 'blur'
+					// }],
 					variety: [{
 						required: true,
 						message: '请输入',
@@ -309,21 +308,21 @@
 				window.location.href = process.env.VUE_APP_BASE_API + "v1/labs/steel/export?deptId=" + this.parentid
 			},
 			//施工单位change
-			cahngeshigong() {
-				for (let i = 0; i < this.optiont.length; i++) {
-					if (this.ruleForm.construction == this.optiont[i].deptName) {
-						this.ruleForm.constructionId = this.optiont[i].deptId
-					}
-				}
-			},
+			// cahngeshigong() {
+			// 	for (let i = 0; i < this.optiont.length; i++) {
+			// 		if (this.ruleForm.construction == this.optiont[i].deptName) {
+			// 			this.ruleForm.constructionId = this.optiont[i].deptId
+			// 		}
+			// 	}
+			// },
 			// 监理单位change
-			cahngejianli(){
-				for (let i = 0; i < this.optiono.length; i++) {
-					if (this.ruleForm.supervision == this.optiono[i].deptName) {
-						this.ruleForm.supervisionId = this.optiono[i].deptId
-					}
-				}
-			},
+			// cahngejianli(){
+			// 	for (let i = 0; i < this.optiono.length; i++) {
+			// 		if (this.ruleForm.supervision == this.optiono[i].deptName) {
+			// 			this.ruleForm.supervisionId = this.optiono[i].deptId
+			// 		}
+			// 	}
+			// },
 			// 新增
 			addwokerdilog() {
 				this.ruleForm = {};
@@ -333,6 +332,7 @@
 			submit(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
+						this.ruleForm.constructionId=this.$route.query.companyNo
 						addrebar(this.ruleForm).then(res => {
 							if (res.code == 200) {
 								this.wokerdilog = false
@@ -359,6 +359,7 @@
 				
 			},
 			updatesubmit() {
+				this.ruleForm.constructionId=this.$route.query.companyNo
 				updaterebar(this.ruleForm).then(res => {
 					if (res.code == 200) {
 						this.$message.success("修改成功")
@@ -442,8 +443,9 @@
 	.control {
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 
 	.elserch {

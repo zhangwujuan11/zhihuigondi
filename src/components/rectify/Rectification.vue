@@ -59,8 +59,13 @@
 			<el-row>
 				<el-col :span="12">
 					<el-form-item label="发起时间" prop="launchTime">
-						<el-date-picker v-model="ruleForm.launchTime" type="date" placeholder="选择日期" format="yyyy-MM-dd"
-							value-format="timestamp">
+						<el-date-picker 
+						v-model="ruleForm.launchTime" 
+						type="date" 
+						placeholder="选择日期" 
+						format="yyyy-MM-dd"
+						:picker-options="pickerOptions0"
+						value-format="timestamp">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="标段" prop="sectionId">
@@ -96,6 +101,7 @@
 						type="date" 
 						format="yyyy-MM-dd"
 						value-format="timestamp"
+						:picker-options="pickerOptions1"
 						placeholder="选择日期">
 						</el-date-picker>
 					</el-form-item>
@@ -129,6 +135,23 @@
 		inject: ["reload"],
 		data() {
 			return {
+				// 日期
+				pickerOptions0: {
+					disabledDate: (time) => {
+						if (this.ruleForm.finishTime != "") {
+							return time.getTime() >  new Date(this.ruleForm.finishTime).getTime();
+						}
+					}
+				},
+				 pickerOptions1: {
+					 
+					disabledDate: (time) => {
+						if (this.ruleForm.launchTime != ""){
+							return time.getTime() < new Date(this.ruleForm.launchTime).getTime();//减去一天的时间代表可以选择同一天;
+						}
+						
+					}
+				},
 				dangerlist: [{ //隐患点options
 					id: 22001,
 					name: "履约",
@@ -446,11 +469,11 @@
 			// 关闭
 			closede(){
 				this.$store.state.rectification=false
-				this.reload()
+				// this.reload()
 			},
 			closedes(){
 				this.$store.state.rectification=false
-				this.reload()
+				// this.reload()
 			}
 		}
 	}

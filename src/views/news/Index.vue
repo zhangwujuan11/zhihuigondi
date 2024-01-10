@@ -2,7 +2,7 @@
 	<div class="partybuild">
 		<div class="maincon buildtop">
 			<div class="swiper">
-				<el-carousel :interval="3000" trigger="click" arrow="always" height="100%">
+				<el-carousel :interval="3000" trigger="click" arrow="always" height="100%" style="cursor: pointer;">
 					<el-carousel-item v-for="item in cover" :key="item.id">
 						<img @click="goqueryid(item.id)" :src="item.mfteCover" style="width: 100%;height: 100%;">
 						<h3  @click="goqueryid(item.id)" class="swiperh3">{{ item.mfteTitle }}</h3>
@@ -78,9 +78,7 @@
 			})
 			newsli({
 				pageSize: 8,
-				pageNum: 1,
-				orderByColumn:'id',
-				isAsc:'desc'
+				pageNum: 1
 			}).then(res=>{
 				this.lidata=res.items
 				this.totalCount=res.total

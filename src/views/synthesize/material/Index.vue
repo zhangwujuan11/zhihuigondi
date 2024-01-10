@@ -16,7 +16,6 @@
 				    <el-table
 				      :data="tableData"
 				       stripe
-					    v-loading="loading"
 					   :header-cell-style="
 					   {background:'linear-gradient(180deg,rgba(10, 74, 216, 0.70) 30%,rgba(5, 49, 146, 0.30))',
 					   color:'#00CFFF !important',
@@ -216,17 +215,18 @@
 		      }
 		    },
 		mounted() {
+			this.tableData=[]
 			// 列表
-			materialcount({
-				limit:20,
-				offset:1,
-			}).then(res=>{
-				this.tableData=res.data.items
-				this.totalCount=res.data.total
-				this.loading=false
-			}).catch(()=>{
-				this.$message.error('请求错误')
-			})
+			// materialcount({
+			// 	limit:20,
+			// 	offset:1,
+			// }).then(res=>{
+			// 	this.tableData=res.data.items
+			// 	this.totalCount=res.data.total
+			// 	this.loading=false
+			// }).catch(()=>{
+			// 	this.$message.error('请求错误')
+			// })
 		},
 		methods:{
 			// 显示第几页
@@ -277,8 +277,9 @@
 	.control{
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;

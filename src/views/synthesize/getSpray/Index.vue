@@ -2,9 +2,16 @@
 	<div class="bridge">
 		<Titlel>
 			<template v-slot:nametext>
-				<span>大气数据检测</span>
+				<span>智能喷淋</span>
 			</template>
 			<template v-slot:contont>
+				<div class="control">
+					<div class="elserch">
+					  <el-input placeholder="请输入监控点名称" v-model="serdata" class="input-with-select">
+						<el-button slot="append" @click="serchdata">搜索</el-button>
+					  </el-input>
+					</div>
+				 </div>
 			   <div>
 				    <el-table
 				      :data="tableData"
@@ -22,53 +29,24 @@
 				        </el-table-column>
 				       <el-table-column
 					   width="200"
-				         prop="recordTimeStr"
-				         label="日期">
+				         prop="monitorName"
+				         label="监控点名称">
 				       </el-table-column>
 				       <el-table-column
-				         prop="pm25"
-				         label="PM2.5">
+				         prop="sprayValue"
+				         label="养护状态值">
+						 <template slot-scope="scope">
+						 		{{scope.row.sprayValue | sprayValue}}
+						 </template>
 				       </el-table-column>
-					   
 					   <el-table-column
-					     prop="pm10"
-					     label="PM10">
-					   </el-table-column>
-					   <el-table-column
-					     prop="noise"
-					     label="噪声">
-					   </el-table-column>
-					   <el-table-column
-					     prop="tem"
-					     label="温度">
-					   </el-table-column>
-					   <el-table-column
-					     prop="hum"
-					     label="湿度">
-					   </el-table-column>
-					   <el-table-column
-						 prop="wp"
-					     label="风力">
-					   </el-table-column>
-					   <el-table-column
-					     prop="ws"
-					     label="风速">
-					   </el-table-column>
-					   <el-table-column
-					     prop="wd8"
-					     label="风向">
-					   </el-table-column>
-					   <el-table-column
-					     prop="tsp"
-					     label="悬浮颗粒">
-					   </el-table-column>
-					   <el-table-column
-					     prop="atm"
-					     label="大气压">
+					   width="200"
+					     prop="createTime"
+					     label="上报时间">
 					   </el-table-column>
 				     </el-table>
 					 <el-pagination background @current-change="handleCurrentChange" :current-page="currentPage"
-						:page-sizes="pageSizes" :page-size="PageSize" layout="prev, pager, next, jumper" :total="totalCount">
+						 :page-size="PageSize" layout="prev, pager, next, jumper" :total="totalCount">
 					</el-pagination>
 			   </div>
 			</template>
@@ -78,11 +56,20 @@
 
 <script>
 	import Titlel from '@/components/slot/Titlel.vue'
-	import {weather} from '@/utils/synthesize.js'
+	import {getspray} from '@/utils/synthesize.js'
 	import { Loading } from 'element-ui';
 	export default{
 		components:{
 			Titlel,
+		},
+		filters:{
+			sprayValue(e){
+				if(e == 0){
+					return '停止养护'
+				}else if(e == 1){
+					return '正在养护'
+				}
+			}
 		},
 		 data() {
 		      return {
@@ -92,21 +79,17 @@
 				currentPage: 1,
 				// 总条数，根据接口获取数据长度(注意：这里不能为空)
 				totalCount: 1,
-				// 个数选择器（可修改）
-				pageSizes: [1, 2, 3, 4],
+				// // 个数选择器（可修改）
+				// pageSizes: [1, 2, 3, 4],
 				// 默认每页显示的条数（可修改）
 				PageSize: 20,
-				// bridgeinfo:{},
-				// identityCode:21001,//身份信息
-				// disablecheck:{},
-				// bridgeupset:{}
 		      }
 		    },
 		mounted() {
 			// 列表
-			weather({
-				limit:20,
-				offset:0
+			getspray({
+				pageSize:20,
+				pageNum:1
 			}).then(res=>{
 				this.tableData=res.data.items
 				this.totalCount=res.data.total
@@ -118,25 +101,26 @@
 			tableHeaderColor () {
 				return { background: 'transparent' }
 			},
-			// 日期截取
-			getrdate(row, column, cellValue, index){
-				if(cellValue == null){
-					return '-'
-				}else{
-					var date =new Date(cellValue) ;
-					var year = date.getFullYear();
-					var month = date.getMonth() + 1;
-					var day = date.getDate();
-					return year + '-' + month + '-' + day
-				}
+			serchdata(){
+				getspray({
+					pageSize:20,
+					pageNum:1,
+					monitorName:this.serdata
+				}).then(res=>{
+					this.tableData=res.data.items
+					this.totalCount=res.data.total
+					this.currentPage = 1
+				}).catch(()=>{
+					this.$message.error('请求错误')
+				})
 			},
 			// 显示第几页
 			handleCurrentChange(val) {
 				// 改变默认的页数
-				weather({
-					audit:this.select,
-					limit:20,
-					offset:20 * (val - 1)
+				getspray({
+					pageSize:20,
+					pageNum:val,
+					monitorName:this.serdata
 				}).then(res=>{
 					this.tableData=res.data.items
 					this.totalCount=res.data.total

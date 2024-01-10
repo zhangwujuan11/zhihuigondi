@@ -30,17 +30,12 @@
 								</div>
 							</div>
 						</div>
-						<div id="myTabContent" class="tab-content ">
-							<div class="tab-pane fade in active tab-pane1" id="0"
-								style="height: 100%;overflow-y: auto;overflow-x:hidden">
-							</div>
-							<div class="tab-pane fade tab-pane2" id="1">
-							</div>
-						</div>
 					</div>
+					<i class="namei" v-for="num in 3" :key="num"></i>
 					<div class="row cams_content_row_right_2" id="camsDirectionPanel"
-						:class="{'active':isActive,'error':!isActive}" @mouseup="Device_PTZ(100)"
-						:onclick="Device_PTZ(100)">
+						:class="{'active':isActive,'error':!isActive}"
+						@mouseup="Device_PTZ(100)" @click="Device_PTZ(100)"
+						>
 						<div class="container default_div" style="width:100%;height:100%">
 							<div class="row" style="width:100%;height:33.33%">
 								<div class="cams_content_row_right_2_arrow cams_content_row_right_2_1"
@@ -115,7 +110,7 @@
 </template>
 
 <script>
-	import {cams,change_cam,camsgetlist,Device} from '@/utils/cams'
+	import {cams,change_cam,camsgetlist,Device,statuscon} from '@/utils/cams'
 	import { Loading } from 'element-ui';
 	import '@/assets/cams/SCWS.cams.live.js'
 	import '@/assets/cams/SCWS.base.css'
@@ -132,11 +127,15 @@
 				actionCarmarId: null,
 				CNO: '',
 				factoryType:'',
-				timer: null // 定时器名称        
+				timer: null, // 定时器名称        
+				list:[]
 			}
 		},
 		mounted() {
-			this.queryCamList('1', 0)
+			this.$nextTick(()=>{
+				this.queryCamList('1', 0)
+			})
+			
 			// 监听页面是否操作
 			var count = 0;
 			var outTime = 5; //分钟
@@ -206,33 +205,58 @@
 			queryCamList(type, index) {
 				this.starVideotLoading()
 				cams(type).then(data => {
-					this.list = data.items
-					this.factoryType=data.items[index].factoryType,
-					this.actionCarmarId=data.items[index].aySerNo
-					if (type == '1' && data.total > 0) {
-						change_cam({
-							id:data.items[index].aySerNo,
-							cameraType:data.items[index].factoryType,
-							cno: data.items[index].cno
-						}).then(res => {
-							this.endVideoLoading() 
-							if (res.code != 200) {
-								console.log(res.data.detail);
-							}else{
-								document.getElementById("hik_iframe").innerHTML =
-									'<iframe src="https://open.ys7.com/ezopen/h5/iframe_se?url=' + res.data
-									.openUrl + '&autoplay=1&templete=0&id=video-container&accessToken=' + res
-									.data.accessToken +
-									'"  id="EZUIKitPlayer-video-container" allowfullscreen="true" allow="autoplay" frameborder="0" class="cams_content_row_left_video"></iframe>';
-								this.open_url = res.data.openUrl;
-								this.accessToken = res.data.accessToken;
-							}
-							
-						})
+					if(data.items){
+						this.list = data.items
+						this.factoryType=data.items[index].factoryType,
+						this.actionCarmarId=data.items[index].aySerNo
+						if (type == '1' && data.total > 0) {
+							change_cam({
+								id:data.items[index].aySerNo,
+								cameraType:data.items[index].factoryType,
+								cno: data.items[index].cno
+							}).then(res => {
+								this.CNO=data.items[index].cno
+								this.endVideoLoading() 
+								if (res.code != 200) {
+									 this.$message.error(res.data.detail)
+								}else{
+									let open_url = res.data.openUrl;
+									if(open_url){
+									  var urlList = open_url.split('/')
+									  urlList[urlList.length-1] = data.items[index].cno+'.hd.live'
+									 this.open_url = urlList.join('/')
+									}
+									
+									document.getElementById("hik_iframe").innerHTML =
+										'<iframe src="https://open.ys7.com/ezopen/h5/iframe_se?url=' +  this.open_url + '&autoplay=1&templete=0&id=video-container&accessToken=' + res
+										.data.accessToken +
+										'"  id="EZUIKitPlayer-video-container" allowfullscreen="true" allow="autoplay" frameborder="0" class="cams_content_row_left_video"></iframe>';
+									this.accessToken = res.data.accessToken;
+								}
+							})
+							this.isonline()
+						}
+					}else{
+						this.endVideoLoading() 
+						this.$message.warning('无监控')
 					}
 				})
-				
 			},
+			
+			// // 状态
+			isonline(){
+				for(let i=0;i<this.list.length;i++){
+					statuscon({
+						cameraType:this.list[i].factoryType,
+						cno:this.list[i].cno,
+						driver:this.list[i].aySerNo,
+					}).then(pon=>{
+						this.list[i].status=pon.data.status
+					})
+				}
+			},
+			
+			
 			Device_PTZ(direction) {
 				Device({
 					id: this.actionCarmarId,
@@ -241,7 +265,7 @@
 					cameraType:this.factoryType
 				}).then(res => {
 					if(res.code!==200){
-					  this.$message.error(res.data.detail)
+					  	console.log(res.data.detail);
 					}
 				})
 			}
@@ -249,7 +273,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.error {
 		display: block;
 	}
@@ -269,12 +293,11 @@
 	.cam_list {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-around;
+		justify-content: space-between;
 	}
 
-	.cam_list::after {
-		content: '';
-		flex: auto;
+	.namei{
+		width: 45%;
 	}
 
 	.cam_list .camslistbox {

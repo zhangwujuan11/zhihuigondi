@@ -38,6 +38,8 @@
 					   }"
 					   @row-click="showrow"
 				       style="width: 100%">
+					   <el-table-column type="index"></el-table-column>
+
 						<el-table-column
 						width="300"
 						  prop="type"
@@ -55,7 +57,7 @@
 					   prop="scanAbnormal"
 					     label="考勤异常人次">
 					   </el-table-column>
-					   <el-table-column
+					  <!-- <el-table-column
 					     prop="greenLevel"
 					     label="绿码人数">
 					   </el-table-column>
@@ -86,7 +88,7 @@
 					   <el-table-column
 					     prop="temperatureNo"
 					     label="未测体温人数">
-					   </el-table-column>
+					   </el-table-column> -->
 				     </el-table>
 					 <el-pagination background @current-change="handleCurrentChange" :current-page="currentPage"
 						:page-sizes="pageSizes" :page-size="PageSize" layout="prev, pager, next, jumper" :total="totalCount">
@@ -203,8 +205,8 @@
 				 window.open(process.env.VUE_APP_BASE_API + "front/v1/face/sum/export?starTime="+this.startmounthyear+"&endTime="+this.endmounthyear)
 			},
 			showrow(i){
+				this.dilogodata=i
 				this.$store.state.wokerdilog=true
-				this.dilogodata=i.type
 			}
 		}
 	}
@@ -237,8 +239,9 @@
 	.control{
 		display: flex;
 		justify-content: end;
-		height: 34px;
+		/* height: 34px; */
 		margin: 20px 0;
+		background-color: transparent;
 	}
 	.elserch{
 		margin-left: 20px;
